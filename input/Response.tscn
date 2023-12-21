@@ -6,6 +6,7 @@
 margin_top = 35.0
 margin_right = 779.0
 margin_bottom = 66.0
+custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/font = ExtResource( 1 )
 text = "This is what the game will give back"
 autowrap = true
