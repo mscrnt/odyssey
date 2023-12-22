@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Item",
 "language": "GDScript",
 "path": "res://items/item.gd"
+}, {
+"base": "Resource",
+"class": "NPC",
+"language": "GDScript",
+"path": "res://npcs/NPC.gd"
 } ]
 _global_script_class_icons={
 "Exit": "",
 "GameRoom": "",
-"Item": ""
+"Item": "",
+"NPC": ""
 }
 
 [application]

@@ -6,6 +6,7 @@ export (String) var room_name = "Room Name" setget set_room_name
 export (String, MULTILINE) var room_description = "This is the description of the room." setget set_room_description
 
 var exits: Dictionary = {}
+var npcs: Array = []
 var items: Array = []
 
 func set_room_name(new_name: String):
@@ -22,20 +23,43 @@ func add_item(item: Item):
 func remove_item(item: Item):
 	items.erase(item)
 	
+func add_npc(npc: NPC):
+	npcs.append(npc)
+	
+func remove_npc(npc: NPC):
+	npcs.erase(npc)
+	
 func get_full_description() -> String:
-	var full_description = PoolStringArray([
-		get_room_description(),
-		get_item_description(),
-		get_exit_description()
-	]).join("\n")
-	return full_description
+	var full_description = PoolStringArray([get_room_description()])
+	
+	var npc_description = get_npc_description()
+	if npc_description != "":
+		full_description.append(npc_description)
+	
+	var item_description = get_item_description()
+	if item_description != "":
+		full_description.append(item_description)
+	
+	full_description.append(get_exit_description())
+	
+	var full_description_string = full_description.join("\n")
+	return full_description_string
 
 func get_room_description() -> String:
 	return "You are now in: " + room_name + "." + "\n\n"+ "It is " + room_description + "\n"
 
+func get_npc_description() -> String:
+	if npcs.size() == 0:
+		return ""
+		
+	var npc_string = ""
+	for npc in npcs:
+		npc_string += npc.npc_name + " "
+	return "NPCs: " + npc_string + "\n"
+
 func get_item_description() -> String:
 	if items.size() == 0:
-		return "No items in this room."
+		return ""
 		
 	var item_string = ""
 	for item in items:

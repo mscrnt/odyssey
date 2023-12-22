@@ -52,6 +52,14 @@ script = ExtResource( 5 )
 [node name="RoomManager" type="Node" parent="."]
 script = ExtResource( 7 )
 
+[node name="Home" parent="RoomManager" instance=ExtResource( 6 )]
+margin_left = 53.0
+margin_top = -215.0
+margin_right = 303.0
+margin_bottom = -115.0
+room_name = "Your Home"
+room_description = "your virtual home in Odyssey VR."
+
 [node name="Central Avalonia" parent="RoomManager" instance=ExtResource( 6 )]
 margin_left = 814.0
 margin_top = -688.0
@@ -119,14 +127,6 @@ margin_bottom = -748.0
 room_name = "Secret Chamber"
 room_description = "concealed behind a hidden door in the Royal Library, the Secret Chamber holds the most confidential archives and artifacts of the kingdom. The chamber, shrouded in mystery, is said to contain powerful relics and forbidden knowledge.
 "
-
-[node name="Home" parent="RoomManager" instance=ExtResource( 6 )]
-margin_left = 53.0
-margin_top = -215.0
-margin_right = 303.0
-margin_bottom = -115.0
-room_name = "Your Home"
-room_description = "your virtual home in Odyssey VR."
 
 [node name="Background" type="PanelContainer" parent="."]
 anchor_right = 1.0

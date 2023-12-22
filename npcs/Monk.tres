@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://npcs/NPC.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+npc_name = "monk"
+initial_dialog = "The Grand Castle is a place of history and mystery, where the past speaks to those who listen.
+The walls have eyes and the shadows, whispers. Not every secret wishes to be known.
+The very stones of this castle hum with ancient spells. Heed their call, and you may yet unveil the secrets they guard."
+post_quest_dialog = "Thank you for completeing the quest."

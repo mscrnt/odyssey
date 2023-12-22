@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://npcs/NPC.gd" type="Script" id=1]
+[ext_resource path="res://items/AthenaSword.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+npc_name = "Athena"
+initial_dialog = "Thanks for meeting me. I have no idea what's going on, but I'm glad you're here.
+I'm not sure what to do next. I think we should split up and explore the area.
+Maybe the Grand Castle has some answers, or maybe the Library.
+Once you figure out anything, come meet me in Diablo Realm
+You should have it unlocked if gave Athena her sword back."
+post_quest_dialog = "Awesome. You finished the quest. Let's go!"
+quest_item = ExtResource( 2 )
