@@ -42,7 +42,7 @@ func go(second_word: String) -> String:
 	if current_room.exits.keys().has(second_word):
 		var exit = current_room.exits[second_word]
 		if exit.is_other_room_locked(current_room):
-			return "That exit is currently locked!"
+			return "The way to the %s is currently locked!" % second_word
 			
 		var change_response = change_room(exit.get_other_room(current_room))
 		return PoolStringArray(["You go %s" % second_word + "\n", change_response]).join("\n")
@@ -85,7 +85,7 @@ func use(second_word: String) -> String:
 			match item.item_type:
 				Types.ItemTypes.KEY:
 					for exit in current_room.exits.values():
-						if exit.room_2 == item.use_value:
+						if exit == item.use_value:
 							exit.room_2_is_locked = false
 							player.drop_item(item)
 							return "You used %s to unlock a door to %s" % [item.item_name, exit.room_2.room_name]

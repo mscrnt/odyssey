@@ -4,9 +4,11 @@
 [ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=2]
 [ext_resource path="res://rooms/Room.gd" type="Script" id=3]
 
-[node name="Room" type="PanelContainer"]
-margin_right = 250.0
-margin_bottom = 100.0
+[node name="GameRoom" type="PanelContainer"]
+margin_left = -274.0
+margin_top = -143.0
+margin_right = -24.0
+margin_bottom = -43.0
 rect_min_size = Vector2( 250, 100 )
 script = ExtResource( 3 )
 
