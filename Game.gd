@@ -8,10 +8,11 @@ export (int) var max_lines_remembered := 30
 var max_scroll_length := 0
 
 onready var command_processor = $CommandProcessor
-onready var history_rows = $Background/MarginContainer/Columns/InventoryRows/GameInfo/Scroll/HistoryRows
-onready var scroll = $Background/MarginContainer/Columns/InventoryRows/GameInfo/Scroll
+onready var history_rows = $Background/MarginContainer/Columns/GameRows/GameInfo/Scroll/HistoryRows
+onready var scroll = $Background/MarginContainer/Columns/GameRows/GameInfo/Scroll
 onready var scrollbar = scroll.get_v_scrollbar()
 onready var room_manager = $RoomManager
+onready var player = $Player
 
 func _ready() -> void:
 	scrollbar.connect("changed", self, "handle_scrollbar_change")
@@ -19,7 +20,7 @@ func _ready() -> void:
 	
 	create_response("Welcome to Odyssey VR! You can type 'help' to see a list of commands.")
 	
-	var starting_room_response = command_processor.initialize(room_manager.get_child(0))
+	var starting_room_response = command_processor.initialize(room_manager.get_child(0), player)
 	create_response(starting_room_response)
 
 func handle_scrollbar_change():

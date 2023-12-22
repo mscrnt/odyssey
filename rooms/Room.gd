@@ -19,6 +19,9 @@ func set_room_description(new_description: String):
 func add_item(item: Item):
 	items.append(item)
 	
+func remove_item(item: Item):
+	items.erase(item)
+	
 func get_full_description() -> String:
 	var full_description = PoolStringArray([
 		get_room_description(),
@@ -42,10 +45,17 @@ func get_item_description() -> String:
 func get_exit_description() -> String:
 	return "Exits: " + PoolStringArray(exits.keys()).join(" ")
 
-func connect_exit(direction: String, room):
+func connect_exit_unlocked(direction: String, room):
+	_connect_exit(direction, room, false)
+
+func connect_exit_locked(direction: String, room):
+	_connect_exit(direction, room, true)
+
+func _connect_exit(direction: String, room, is_locked: bool = false):
 	var exit = Exit.new()
 	exit.room_1 = self
 	exit.room_2 = room
+	exit.room_2_is_locked = is_locked
 	exits[direction] = exit
 	match direction:
 		"west":

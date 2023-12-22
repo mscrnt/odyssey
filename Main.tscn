@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://CommandProcessor.gd" type="Script" id=5]
 [ext_resource path="res://rooms/Room.tscn" type="PackedScene" id=6]
 [ext_resource path="res://rooms/RoomManager.gd" type="Script" id=7]
+[ext_resource path="res://Player.gd" type="Script" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
@@ -52,20 +53,38 @@ script = ExtResource( 5 )
 script = ExtResource( 7 )
 
 [node name="Central Avalonia" parent="RoomManager" instance=ExtResource( 6 )]
-margin_left = 1118.0
-margin_top = 13.0
-margin_right = 1368.0
-margin_bottom = 241.0
+margin_left = 825.0
+margin_top = -408.0
+margin_right = 1075.0
+margin_bottom = -180.0
 room_name = "Central Avalonia"
 room_description = "a bustling nexus of the mystical land of Avalonia, teeming with life and activity. The Grand Castle, visible from miles away, dominates the skyline to the north,, symbolizing strength and wisdom."
 
 [node name="Grand Castle" parent="RoomManager" instance=ExtResource( 6 )]
-margin_left = 509.0
-margin_top = -332.0
-margin_right = 759.0
-margin_bottom = -232.0
+margin_left = 828.0
+margin_top = -784.0
+margin_right = 1078.0
+margin_bottom = -484.0
 room_name = "The Grand Castle"
 room_description = "dominating the skyline of Central Avalonia... The Grand Castle is a beacon of power and history. Its towering spires and fortified walls are a testament to the ancient magic and architecture of Avalonia. The castle is a labyrinth of grand halls and secret passages, each echoing with tales of yore."
+
+[node name="Royal Library" parent="RoomManager" instance=ExtResource( 6 )]
+margin_left = 1188.0
+margin_top = -796.0
+margin_right = 1438.0
+margin_bottom = -472.0
+room_name = "Royal Library"
+room_description = "a sanctum of knowledge, the Royal Library houses towering shelves filled with ancient scrolls and books. Soft candlelight flickers across the room, illuminating the wisdom preserved for generations. It's a place of study and discovery, where the past speaks to those who listen.
+"
+
+[node name="Secret Chamber" parent="RoomManager" instance=ExtResource( 6 )]
+margin_left = 1547.0
+margin_top = -775.0
+margin_right = 1797.0
+margin_bottom = -499.0
+room_name = "Secret Chamber"
+room_description = "concealed behind a hidden door in the Royal Library, the Secret Chamber holds the most confidential archives and artifacts of the kingdom. The chamber, shrouded in mystery, is said to contain powerful relics and forbidden knowledge.
+"
 
 [node name="Home" parent="RoomManager" instance=ExtResource( 6 )]
 margin_left = 53.0
@@ -95,19 +114,19 @@ margin_right = 1009.0
 margin_bottom = 585.0
 custom_constants/separation = 15
 
-[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
+[node name="InfoRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
 margin_right = 200.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 15
 
-[node name="InventoryLabel" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
+[node name="InventoryLabel" type="PanelContainer" parent="Background/MarginContainer/Columns/InfoRows"]
 margin_right = 200.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 0, 30 )
 custom_styles/panel = SubResource( 5 )
 
-[node name="Label" type="Label" parent="Background/MarginContainer/Columns/GameRows/InventoryLabel"]
+[node name="Label" type="Label" parent="Background/MarginContainer/Columns/InfoRows/InventoryLabel"]
 margin_right = 200.0
 margin_bottom = 31.0
 custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
@@ -115,21 +134,21 @@ custom_fonts/font = ExtResource( 2 )
 text = "Placeholder"
 align = 1
 
-[node name="InventoryPanel" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
+[node name="InventoryPanel" type="PanelContainer" parent="Background/MarginContainer/Columns/InfoRows"]
 margin_top = 46.0
 margin_right = 200.0
 margin_bottom = 520.0
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
-[node name="DropDownMenu" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
+[node name="DropDownMenu" type="PanelContainer" parent="Background/MarginContainer/Columns/InfoRows"]
 margin_top = 535.0
 margin_right = 200.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 35 )
 custom_styles/panel = SubResource( 3 )
 
-[node name="OptionButton" type="OptionButton" parent="Background/MarginContainer/Columns/GameRows/DropDownMenu"]
+[node name="OptionButton" type="OptionButton" parent="Background/MarginContainer/Columns/InfoRows/DropDownMenu"]
 margin_right = 200.0
 margin_bottom = 35.0
 custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
@@ -140,50 +159,50 @@ custom_styles/normal = SubResource( 8 )
 align = 1
 script = ExtResource( 4 )
 
-[node name="InventoryRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
+[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
 margin_left = 215.0
 margin_right = 994.0
 margin_bottom = 570.0
 size_flags_horizontal = 3
 custom_constants/separation = 15
 
-[node name="GameInfo" type="PanelContainer" parent="Background/MarginContainer/Columns/InventoryRows"]
+[node name="GameInfo" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
 margin_right = 779.0
 margin_bottom = 520.0
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
-[node name="Scroll" type="ScrollContainer" parent="Background/MarginContainer/Columns/InventoryRows/GameInfo"]
+[node name="Scroll" type="ScrollContainer" parent="Background/MarginContainer/Columns/GameRows/GameInfo"]
 margin_right = 779.0
 margin_bottom = 520.0
 scroll_horizontal_enabled = false
 
-[node name="HistoryRows" type="VBoxContainer" parent="Background/MarginContainer/Columns/InventoryRows/GameInfo/Scroll"]
+[node name="HistoryRows" type="VBoxContainer" parent="Background/MarginContainer/Columns/GameRows/GameInfo/Scroll"]
 margin_right = 779.0
 margin_bottom = 520.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 20
 
-[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/Columns/InventoryRows"]
+[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
 margin_top = 535.0
 margin_right = 779.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 35 )
 custom_styles/panel = SubResource( 3 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/Columns/InventoryRows/InputArea"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/Columns/GameRows/InputArea"]
 margin_right = 779.0
 margin_bottom = 35.0
 
-[node name="Caret" type="Label" parent="Background/MarginContainer/Columns/InventoryRows/InputArea/HBoxContainer"]
+[node name="Caret" type="Label" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
 margin_top = 2.0
 margin_right = 28.0
 margin_bottom = 33.0
 custom_fonts/font = ExtResource( 2 )
 text = " > "
 
-[node name="Input" type="LineEdit" parent="Background/MarginContainer/Columns/InventoryRows/InputArea/HBoxContainer"]
+[node name="Input" type="LineEdit" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
 margin_left = 32.0
 margin_right = 779.0
 margin_bottom = 35.0
@@ -194,5 +213,8 @@ custom_styles/normal = SubResource( 4 )
 max_length = 48
 script = SubResource( 10 )
 
-[connection signal="text_entered" from="Background/MarginContainer/Columns/InventoryRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
-[connection signal="text_entered" from="Background/MarginContainer/Columns/InventoryRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/Columns/InventoryRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]
+[node name="Player" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
+[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]
