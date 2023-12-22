@@ -7,7 +7,7 @@ onready var room_manager = $RoomManager
 onready var player = $Player
 
 func _ready() -> void:
-	game_info.create_response("Welcome to Odyssey VR! You can type 'help' to see a list of commands.")
+	game_info.create_response(Types.wrap_system_text("Welcome to Odyssey VR! You can type 'help' to see a list of commands."))
 	
 	var starting_room_response = command_processor.initialize(room_manager.get_child(0), player)
 	game_info.create_response(starting_room_response)

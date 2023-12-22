@@ -2,11 +2,12 @@
 
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=1]
 
-[node name="Response" type="Label"]
+[node name="Response" type="RichTextLabel"]
 margin_top = 35.0
 margin_right = 779.0
 margin_bottom = 66.0
-custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/font = ExtResource( 1 )
-text = "This is what the game will give back"
-autowrap = true
+custom_fonts/normal_font = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Hello![color=green] This is what the [color=red] response [color=] line is."
+text = "Hello! This is what the  response  line is."
+fit_content_height = true

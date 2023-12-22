@@ -46,7 +46,7 @@ func get_full_description() -> String:
 	return full_description_string
 
 func get_room_description() -> String:
-	return "You are now in: " + room_name + "." + "\n\n"+ "It is " + room_description + "\n"
+	return "You are now in: " + Types.wrap_location_text(room_name) + "." + "\n\n"+ "It is " + room_description + "\n"
 
 func get_npc_description() -> String:
 	if npcs.size() == 0:
@@ -54,7 +54,10 @@ func get_npc_description() -> String:
 		
 	var npc_string = ""
 	for npc in npcs:
-		npc_string += npc.npc_name + " "
+		if npc != npcs[npcs.size() - 1]:
+			npc_string += Types.wrap_npc_text(npc.npc_name) + " | "
+		else:
+			npc_string += Types.wrap_npc_text(npc.npc_name)
 	return "NPCs: " + npc_string + "\n"
 
 func get_item_description() -> String:
@@ -63,11 +66,14 @@ func get_item_description() -> String:
 		
 	var item_string = ""
 	for item in items:
-		item_string += item.item_name + " "
+		if item != items[items.size() - 1]:
+			item_string += Types.wrap_item_text(item.item_name) + " | "
+		else:
+			item_string += Types.wrap_item_text(item.item_name)
 	return "Items: " + item_string + "\n"
 
 func get_exit_description() -> String:
-	return "Exits: " + PoolStringArray(exits.keys()).join(" ")
+	return "Exits: " + Types.wrap_location_text(PoolStringArray(exits.keys()).join(" | "))
 
 func connect_exit_unlocked(direction: String, room, room_2_ovr_name = "null"):
 	return _connect_exit(direction, room, false, room_2_ovr_name)
