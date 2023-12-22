@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://rooms/Room.tscn" type="PackedScene" id=6]
 [ext_resource path="res://rooms/RoomManager.gd" type="Script" id=7]
 [ext_resource path="res://Player.gd" type="Script" id=8]
+[ext_resource path="res://GameInfo.tscn" type="PackedScene" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
@@ -200,23 +201,7 @@ margin_bottom = 570.0
 size_flags_horizontal = 3
 custom_constants/separation = 15
 
-[node name="GameInfo" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
-margin_right = 779.0
-margin_bottom = 520.0
-size_flags_vertical = 3
-custom_styles/panel = SubResource( 2 )
-
-[node name="Scroll" type="ScrollContainer" parent="Background/MarginContainer/Columns/GameRows/GameInfo"]
-margin_right = 779.0
-margin_bottom = 520.0
-scroll_horizontal_enabled = false
-
-[node name="HistoryRows" type="VBoxContainer" parent="Background/MarginContainer/Columns/GameRows/GameInfo/Scroll"]
-margin_right = 779.0
-margin_bottom = 520.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/separation = 20
+[node name="GameInfo" parent="Background/MarginContainer/Columns/GameRows" instance=ExtResource( 9 )]
 
 [node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
 margin_top = 535.0
