@@ -141,7 +141,6 @@ custom_constants/separation = 15
 [node name="InfoRows" parent="Background/MarginContainer/Columns" instance=ExtResource( 4 )]
 margin_right = 250.0
 rect_min_size = Vector2( 250, 0 )
-size_flags_horizontal = 1
 
 [node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
 margin_left = 265.0
