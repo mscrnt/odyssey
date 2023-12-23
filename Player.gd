@@ -11,9 +11,13 @@ func drop_item(item: Item):
 
 func get_inventory_list() -> String:
 	if inventory.size() == 0:
-		return "You aren't currently holding anything"
+		return Types.wrap_system_text("You aren't currently holding anything!")
 		
 	var item_string = ""
 	for item in inventory:
-		item_string += item.item_name + " "
-	return "Inventory: " + item_string + "\n"
+		if item != inventory[inventory.size() - 1]:
+			item_string += Types.wrap_item_text(item.item_name) + " | "
+		else:
+			item_string += Types.wrap_item_text(item.item_name)
+	return Types.wrap_system_text("Inventory: ") + item_string + "\n"
+
