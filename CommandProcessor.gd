@@ -7,61 +7,97 @@ signal room_updated(current_room)
 var current_room = null
 var player = null
 
+# warning-ignore:shadowed_variable
 func initialize(starting_room, player) -> String:
 	self.player = player
 	return change_room(starting_room)
 
 
 func process_command(input: String) -> String:
-	var words = input.split(' ', false)
-	if words.size() == 0:
-		return Types.wrap_system_text("Error: no words were parsed.")
-
-	var first_word = words[0].to_lower()
-	var second_word = ""
-	if words.size() > 1:
-		second_word = words[1].to_lower()
-		
-	match first_word:
-		"go":
-			return go(second_word)
-		"take":
-			return take(second_word)
-		"give":
-			return give(second_word)
-		"drop":
-			return drop(second_word)
-		"inventory":
-			return inventory()
-		"use":
-			return use(second_word)
-		"talk":
-			return talk(second_word)
-		"help":
-			return help()
-		_:
-			return Types.wrap_system_text("Unrecognized command - please try again.")
-			
-
-
-func go(second_word: String) -> String:
-	if second_word == "":
-		return Types.wrap_system_text("Go where?")
+	input = input.strip_edges()  # Trim whitespace from the command
+	var regex = RegEx.new()
 	
-	if current_room.exits.keys().has(second_word):
-		var exit = current_room.exits[second_word]
-		if exit.is_other_room_locked(current_room):
-			return Types.wrap_system_text("The way to the " + Types.wrap_location_text(second_word) + " is currently locked!")
-			
-		var change_response = change_room(exit.get_other_room(current_room))
-		return PoolStringArray(["You go to " + Types.wrap_location_text(second_word) + "\n", change_response]).join("\n")
+	# Use regex for multi-word command processing
+	var patterns = {
+		"give": "^give (.+) to (.+)$",
+		"use": "^use (.+) on (.+)$",
+		"examine": "^examine (.+)$",
+		"go": "^go (.+)$",
+		"take": "^take (.+)$",
+		"drop": "^drop (.+)$",
+		"talk": "^talk to (.+)$"
+	}
+
+	for pattern in patterns.keys():
+		regex.compile(patterns[pattern])
+		var result = regex.search(input)
+		if result:
+			var command_details = result.get_strings()
+			match pattern:
+				"give":
+					return give(command_details[1].strip_edges() + " to " + command_details[2].strip_edges())
+				"use":
+					return use(command_details[1].strip_edges() + " on " + command_details[2].strip_edges())
+				"examine":
+					return examine(command_details[1].strip_edges())
+				"go":
+					return go(command_details[1].strip_edges())
+				"take":
+					return take(command_details[1].strip_edges())
+				"drop":
+					return drop(command_details[1].strip_edges())
+				"talk":
+					return talk(command_details[1].strip_edges())
+
+	# Single-word command handling
+	var words = input.split(' ')
+	if words.size() > 0:
+		var first_word = words[0].to_lower()
+		match first_word:
+			"inventory":
+				return inventory()
+			"help":
+				return help()
+			"examine":
+				return Types.wrap_system_text("Examine " + Types.wrap_item_text("what?"))
+			"give":
+				return Types.wrap_system_text("Give " + Types.wrap_item_text("what") + " to " + Types.wrap_npc_text("what?") + " Example: ") + "give " + Types.wrap_item_text("[item]") + " to " + Types.wrap_npc_text("[thing]") + "."
+			"use":
+				return Types.wrap_system_text("Use " + Types.wrap_item_text("what") + " to " + Types.wrap_npc_text("what?") + " Example: ") + "use " + Types.wrap_item_text("[item]") + " on " + Types.wrap_npc_text("[thing]") + "."
+			"go":
+				return Types.wrap_system_text("Go " + Types.wrap_location_text("where?"))
+			"take":
+				return Types.wrap_system_text("Take " + Types.wrap_item_text("what?"))
+			"drop":
+				return Types.wrap_system_text("Drop " + Types.wrap_item_text("what?"))
+			"talk":
+				return Types.wrap_system_text("Talk to " + Types.wrap_npc_text("whom?"))
+			_:
+				return Types.wrap_system_text("Unrecognized command or incorrect syntax.")
 	else:
-		return Types.wrap_system_text("This room has no exit to " + Types.wrap_location_text(second_word))
+		return Types.wrap_system_text("Please enter a command.")
+
+
+
+
+func go(location_name: String) -> String:
+	# Normalize the input for comparison by converting it to lowercase
+	location_name = location_name.to_lower()
+
+	# Attempt to find an exit matching the normalized location name
+	var found_exit = current_room.exits.get(location_name)
+	if found_exit:
+		if found_exit.is_other_room_locked(current_room):
+			return Types.wrap_system_text("The way to the " + Types.wrap_location_text(location_name) + " is currently locked!")
+		
+		var change_response = change_room(found_exit.get_other_room(current_room))
+		return PoolStringArray(["You go to " + Types.wrap_location_text(location_name) + "\n", change_response]).join("\n")
+	else:
+		return Types.wrap_system_text("This room has no exit to " + Types.wrap_location_text(location_name))
+
+
 	
 func take(second_word: String) -> String:
-	if second_word == "":
-		return Types.wrap_system_text("Take what?")
-		
 	for item in current_room.items:
 		if second_word.to_lower() == item.item_name.to_lower():
 			current_room.remove_item(item)
@@ -71,31 +107,43 @@ func take(second_word: String) -> String:
 			
 	return Types.wrap_system_text("No item called " + Types.wrap_item_text(second_word) + " for you to take here.")
 	
-func give(second_word: String) -> String:
-	if second_word == "":
-		return Types.wrap_system_text("Give what?")
+func give(command_details: String) -> String:
+	var parts = command_details.split(" to ")
+	if parts.size() != 2:
+		return Types.wrap_system_text("Syntax error. Use 'give [item] to [npc]'.")
 
-	var has_item := false
+	var item_name = parts[0].strip_edges().to_lower()
+	var npc_name = parts[1].strip_edges().to_lower()
+
+	var item_to_give = null
 	for item in player.inventory:
-		if second_word.to_lower() == item.item_name.to_lower():
-			has_item = true
-			
-	if not has_item:
-		return Types.wrap_system_text("You don't have the item, " + Types.wrap_item_text(second_word) + ", to give!")
-	
+		if item.item_name.to_lower() == item_name:
+			item_to_give = item
+			break
+
+	if not item_to_give:
+		return Types.wrap_system_text("You don't have a " + Types.wrap_item_text(item_name) + " to give.")
+
+	var npc_to_give_to = null
 	for npc in current_room.npcs:
-		if npc.quest_item != null and second_word.to_lower() == npc.quest_item.item_name.to_lower():
-			npc.has_received_quest_item = true
-			if npc.quest_reward != null:
-				var reward = npc.quest_reward
-				if "room_2_is_locked" in reward:
-					reward.room_2_is_locked = false
-				else:
-					printerr("Warning - tried to have a quest reward type that isn't in the game!")
-			player.drop_item(second_word)
-			return "You give the " + Types.wrap_item_text(second_word) + " to " + Types.wrap_npc_text(npc.npc_name)
+		if npc.npc_name.to_lower() == npc_name:
+			npc_to_give_to = npc
+			break
+
+	if not npc_to_give_to:
+		return Types.wrap_system_text("There's no one named " + Types.wrap_npc_text(npc_name) + " here to give anything to.")
 	
-	return Types.wrap_system_text("Nobody here wants the " + Types.wrap_item_text(second_word) + ".")
+	if npc_to_give_to.quest_item and npc_to_give_to.quest_item.item_name.to_lower() == item_name:
+		npc_to_give_to.has_received_quest_item = true
+		if npc_to_give_to.quest_reward != null:
+			var reward = npc_to_give_to.quest_reward
+			reward.room_2_is_locked = false  # Assuming 'reward' is the exit that needs to be unlocked
+		player.drop_item(item_to_give)
+		emit_signal('room_updated', current_room)
+		return "You give the " + Types.wrap_item_text(item_name) + " to " + Types.wrap_npc_text(npc_name) + "."
+	
+	return Types.wrap_system_text(npc_name.capitalize() + " doesn't need a " + item_name.capitalize() + ".")
+
 	
 func drop(second_word: String) -> String:
 	if second_word == "":
@@ -113,29 +161,59 @@ func drop(second_word: String) -> String:
 func inventory() -> String:
 	return player.get_inventory_list()
 
-func use(second_word: String) -> String:
-	if second_word == "":
-		return Types.wrap_system_text("Use what?")
-	
+func use(command_details: String) -> String:
+	var parts = command_details.split(" on ")
+	if parts.size() != 2:
+		return Types.wrap_system_text("Syntax error. Use 'use [item] on [object]'.")
+
+	var item_name = parts[0].strip_edges().to_lower()
+	var target_name = parts[1].strip_edges().to_lower()
+
+	var item_to_use = null
 	for item in player.inventory:
-		if second_word.to_lower() == item.item_name.to_lower():
-			match item.item_type:
-				Types.ItemTypes.KEY:
-					for exit in current_room.exits.values():
-						if exit == item.use_value:
-							exit.room_2_is_locked = false
-							player.drop_item(item)
-							return "You used the " + Types.wrap_item_text(item.item_name) + " to unlock the door to " + Types.wrap_location_text(exit.room_2.room_name)
-					return Types.wrap_system_text("That " + Types.wrap_item_text(item.item_name) + " does not unlock any doors in this room!")
-				_:
-					return Types.wrap_system_text("Error - tried to use an item with an invalid type!")
-			
-	return Types.wrap_system_text("You don't have a " + Types.wrap_item_text(second_word) + " to use!")
+		if item.item_name.to_lower() == item_name:
+			item_to_use = item
+			break
+
+	if not item_to_use:
+		return Types.wrap_system_text("You don't have a " + Types.wrap_item_text(item_name) + " to use.")
+
+	for exit in current_room.exits.values():
+		if target_name == exit.room_2.room_name.to_lower() and item_to_use.use_value == exit:
+			if exit.room_2_is_locked:
+				exit.room_2_is_locked = false
+				player.drop_item(item_to_use)
+				emit_signal('room_updated', current_room)
+				return "You used the " + Types.wrap_item_text(item_name) + " to unlock the door to " + Types.wrap_location_text(exit.room_2.room_name) + "."
+			else:
+				return Types.wrap_system_text("The " + Types.wrap_location_text(exit.room_2.room_name) + " is not locked.")
+
+	return Types.wrap_system_text("There's nothing to use the " + Types.wrap_item_text(item_name) + " on here.")
+
+func examine(target_name: String) -> String:
+	target_name = target_name.to_lower()
+
+	# Check if the target is an exit in the room
+	for exit in current_room.exits.values():
+		if exit and exit.room_2.room_name.to_lower() == target_name:
+			return Types.wrap_location_text(exit.room_2.room_name) + ": " + exit.room_2.examine_text
+		elif exit and exit.room_1 and exit.room_1.room_name.to_lower() == target_name:
+			# This case will check if you can examine the room you're coming from, if necessary
+			return Types.wrap_location_text(exit.room_1.room_name) + ": " + exit.room_1.examine_text
+
+	# Check if the target is an item in the room
+	for item in current_room.items:
+		if item.item_name.to_lower() == target_name:
+			return Types.wrap_item_text(item.item_name) + ": " + item.item_description
+
+	# Check if the target is an NPC in the room
+	for npc in current_room.npcs:
+		if npc.npc_name.to_lower() == target_name:
+			return Types.wrap_npc_text(npc.npc_name) + ": " + npc.npc_description
+
+	return Types.wrap_system_text("There is no '" + target_name + "' to examine here.")
 
 func talk(second_word: String) -> String:
-	if second_word == "":
-		return Types.wrap_system_text("Talk to who?")
-	
 	for npc in current_room.npcs:
 		if npc.npc_name.to_lower() == second_word:
 			var dialog = npc.post_quest_dialog if npc.has_received_quest_item else npc.initial_dialog
@@ -144,17 +222,20 @@ func talk(second_word: String) -> String:
 	return Types.wrap_system_text(Types.wrap_npc_text(second_word) + " is not in the area")
 
 func help() -> String:
-	return Types.wrap_system_text(PoolStringArray([
-		"You can use these commands: ",
-		" go " + Types.wrap_location_text("[location]"),
-		" take " + Types.wrap_item_text("[item]"),
-		" drop " + Types.wrap_item_text("[item]"),
-		" use " + Types.wrap_item_text("[item]"),
-		" talk " + Types.wrap_npc_text("[npc]"),
-		" give " + Types.wrap_item_text("[item]"),
-		" inventory",
-		" help"
-	]).join("\n"))
+	return PoolStringArray([
+		Types.wrap_system_text("Available commands:"),
+		" - go " + Types.wrap_location_text("[location]") + ": " + Types.wrap_system_text("Example:") + " 'go " + Types.wrap_location_text("central avalonia") + "'",
+		" - examine " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'examine " + Types.wrap_item_text("door") + "'",
+		" - take " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'take " + Types.wrap_item_text("enchanted sword") + "'",
+		" - drop " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'drop " + Types.wrap_item_text("mystical shield") + "'",
+		" - use " + Types.wrap_item_text("[item]") + " on " + Types.wrap_location_text("[object]") + ": " + Types.wrap_system_text("Example:") + " 'use " + Types.wrap_item_text("key") + " on " + Types.wrap_location_text("stone door") + "'",
+		" - talk to " + Types.wrap_npc_text("[npc]") + ": " + Types.wrap_system_text("Example:") + " 'talk to " + Types.wrap_npc_text("merchant lorenzo") + "'",
+		" - give " + Types.wrap_item_text("[item]") + " to " + Types.wrap_npc_text("[npc]") + ": " + Types.wrap_system_text("Example:") + " 'give " + Types.wrap_item_text("ruby") + " to " + Types.wrap_npc_text("queen") + "'",
+		" - inventory: 'inventory'",
+		" - help: 'help'"
+	]).join("\n")
+
+
 
 func change_room(new_room: GameRoom) -> String:
 	current_room = new_room

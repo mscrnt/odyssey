@@ -3,7 +3,10 @@ extends PanelContainer
 class_name GameRoom
 
 export (String) var room_name = "Room Name" setget set_room_name
+export (String) var display_name = "Display Name"
 export (String, MULTILINE) var room_description = "This is the description of the room." setget set_room_description
+export (String, MULTILINE) var examine_text = "This is text that appears when you examine this room."
+export (bool) var hub = false
 
 var exits: Dictionary = {}
 var npcs: Array = []
@@ -73,7 +76,7 @@ func get_item_description() -> String:
 	return "Items: " + item_string + "\n"
 
 func get_exit_description() -> String:
-	return "Exits: " + Types.wrap_location_text(PoolStringArray(exits.keys()).join(" | "))
+	return "Exits: " + Types.wrap_location_text(PoolStringArray(exits.keys()).join("[/color] | [color=#f7c07c]"))
 
 func connect_exit_unlocked(direction: String, room, room_2_ovr_name = "null"):
 	return _connect_exit(direction, room, false, room_2_ovr_name)

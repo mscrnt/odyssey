@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource( 1 )
 npc_name = "Athena"
+npc_description = "Athena is a strategic and brave co-op player, known for her wisdom and valor. She wears gleaming armor and wields a shield adorned with an owl. Her leadership and quick thinking make her an invaluable ally, turning the tide in critical moments of gameplay."
 initial_dialog = "Thanks for meeting me. I have no idea what's going on, but I'm glad you're here.
 I'm not sure what to do next. I think we should split up and explore the area.
 Maybe the Grand Castle has some answers, or maybe the Library.
