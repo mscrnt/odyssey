@@ -47,76 +47,86 @@ margin_left = 53.0
 margin_top = -215.0
 margin_right = 303.0
 margin_bottom = -115.0
-room_name = "Your Home"
+room_name = "Home"
 room_description = "your virtual home in Odyssey VR."
 
-[node name="Central Avalonia" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Avalonia" type="Node" parent="RoomManager"]
+
+[node name="Central Avalonia" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 814.0
 margin_top = -688.0
 margin_right = 1064.0
-margin_bottom = -460.0
+margin_bottom = -450.0
 room_name = "Central Avalonia"
 room_description = "a bustling nexus of the mystical land of Avalonia, teeming with life and activity. The Grand Castle, visible from miles away, dominates the skyline to the north,, symbolizing strength and wisdom."
+hub = true
 
-[node name="Mystic Market" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Mystic Market" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 531.0
 margin_top = -746.0
 margin_right = 781.0
-margin_bottom = -374.0
+margin_bottom = -364.0
 room_name = "Mystic Market"
 room_description = "a bustling hub in the heart of Avalonia. The Mystic Market is a sensory overload of sights, sounds, and scents. Stalls and shops line the crowded streets, offering a plethora of magical artifacts and exotic goods. The air is filled with the aroma of mystical incense, the chatter of bargaining customers, and the occasional sparkle of a newly cast spell.
 "
 
-[node name="Grand Castle" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Grand Castle" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 820.0
 margin_top = -1046.0
 margin_right = 1070.0
-margin_bottom = -746.0
+margin_bottom = -736.0
 room_name = "The Grand Castle"
 room_description = "dominating the skyline of Central Avalonia... The Grand Castle is a beacon of power and history. Its towering spires and fortified walls are a testament to the ancient magic and architecture of Avalonia. The castle is a labyrinth of grand halls and secret passages, each echoing with tales of yore."
 
-[node name="Hall of Elders" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Hall of Elders" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 818.0
 margin_top = -435.0
 margin_right = 1068.0
-margin_bottom = -87.0
+margin_bottom = -77.0
 room_name = "The Hall of Elders"
 room_description = " a sanctum of ancient wisdom and revered traditions. Majestic in its design, the hall features towering columns, intricate murals depicting the history of Avalonia, and shelves lined with age-old tomes and artifacts. The air is filled with a serene silence, occasionally broken by the soft murmur of scholars and the rustling of parchment."
 
-[node name="Grand Courtyard" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Grand Courtyard" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 542.0
 margin_top = -973.0
-margin_right = 792.0
-margin_bottom = -841.0
+margin_right = 808.0
+margin_bottom = -831.0
 room_name = "The Grand Courtyard"
 room_description = "a garden overlooking the Mystic Market. There are stairs you can take down to the market."
 
-[node name="Throne Room" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Throne Room" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 825.0
 margin_top = -1423.0
 margin_right = 1075.0
-margin_bottom = -1123.0
+margin_bottom = -1113.0
 room_name = "The Throne Room"
 room_description = "the heart of the Grand Castle. The Throne Room is a grandiose hall adorned with ornate tapestries and gleaming armor. The throne itself, a masterpiece of craftsmanship, sits majestically at the far end, a symbol of the kingdom's enduring legacy.
 "
 
-[node name="Royal Library" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Royal Library" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 1211.0
 margin_top = -1048.0
 margin_right = 1461.0
-margin_bottom = -724.0
+margin_bottom = -714.0
 room_name = "Royal Library"
 room_description = "a sanctum of knowledge, the Royal Library houses towering shelves filled with ancient scrolls and books. Soft candlelight flickers across the room, illuminating the wisdom preserved for generations. It's a place of study and discovery, where the past speaks to those who listen.
 "
 
-[node name="Secret Chamber" parent="RoomManager" instance=ExtResource( 6 )]
+[node name="Secret Chamber" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 1563.0
 margin_top = -1024.0
 margin_right = 1813.0
-margin_bottom = -748.0
+margin_bottom = -738.0
 room_name = "Secret Chamber"
 room_description = "concealed behind a hidden door in the Royal Library, the Secret Chamber holds the most confidential archives and artifacts of the kingdom. The chamber, shrouded in mystery, is said to contain powerful relics and forbidden knowledge.
 "
+
+[node name="Sewers" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
+margin_bottom = -1.0
+room_name = "Sewers"
+display_name = "Sewers"
+room_description = "dark and dank. You can see and hear what looks like Central Avalonia on the other side of the drain."
+examine_text = "A metel grate leads the path to the underground sewers of Central Avalonia"
 
 [node name="Background" type="PanelContainer" parent="."]
 anchor_right = 1.0

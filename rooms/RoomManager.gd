@@ -1,47 +1,46 @@
 extends Node
 
-
 func _ready() -> void:
-	
-	## World - Odyssey VR
-	
 	# Home
-	$"Home".connect_exit_unlocked("avalonia", $"Central Avalonia", "home")
-	
-	## World - AVALONIA
+	var home_room = $Home
+	home_room.connect_exit_unlocked("central avalonia", $"Avalonia/Central Avalonia", "home")
 	
 	# Central Avalonia
-	$"Central Avalonia".connect_exit_unlocked("castle", $"Grand Castle", "avalonia")
-	$"Central Avalonia".connect_exit_unlocked("market", $"Mystic Market", "avalonia")
-	var sewer_exit = $"Central Avalonia".connect_exit_locked("sewers", $"Secret Chamber", "avalonia")
-	$"Central Avalonia".connect_exit_unlocked("elders", $"Hall of Elders", "avalonia")
+	var central_avalonia_room = $"Avalonia/Central Avalonia"
+	central_avalonia_room.connect_exit_unlocked("grand castle", $"Avalonia/Grand Castle", "central avalonia")
+	central_avalonia_room.connect_exit_unlocked("mystic market", $"Avalonia/Mystic Market", "central avalonia")
+	var sewer_exit = central_avalonia_room.connect_exit_locked("sewers", $Avalonia/Sewers, "central avalonia")
+	central_avalonia_room.connect_exit_unlocked("hall of elders", $"Avalonia/Hall of Elders", "central avalonia")
 	
+	# Add NPCs to Central Avalonia
 	var athena = load_npc("Athena")
-	$"Central Avalonia".add_npc(athena)
+	central_avalonia_room.add_npc(athena)
 	athena.quest_reward = sewer_exit
 	
-	
-	# Mystic Market
-	# TODO
-	
 	# The Grand Castle
-	$"Grand Castle".connect_exit_unlocked("throne", $"Throne Room", "castle")
-	$"Grand Castle".connect_exit_unlocked("library", $"Royal Library", "castle")
-	$"Grand Castle".connect_exit_unlocked("courtyard", $"Grand Courtyard", "castle")
+	var grand_castle_room = $"Avalonia/Grand Castle"
+	grand_castle_room.connect_exit_unlocked("throne room", $"Avalonia/Throne Room", "grand castle")
+	grand_castle_room.connect_exit_unlocked("royal library", $"Avalonia/Royal Library", "grand castle")
+	grand_castle_room.connect_exit_unlocked("grand courtyard", $"Avalonia/Grand Courtyard", "grand castle")
 	
+	# Add NPCs to The Grand Castle
 	var monk = load_npc("Monk")
-	$"Grand Castle".add_npc(monk)
+	grand_castle_room.add_npc(monk)
 	
 	# The Royal Library
-	var chamber_exit = $"Royal Library".connect_exit_locked("chamber", $"Secret Chamber", "library")
+	var royal_library_room = $"Avalonia/Royal Library"
+	var chamber_exit = royal_library_room.connect_exit_locked("secret chamber", $"Avalonia/Secret Chamber", "royal library")
 	var key = load_item("SecretChamberKey")
 	key.use_value = chamber_exit
-	$"Royal Library".add_item(key)
+	royal_library_room.add_item(key)
 	
 	# Secret Chamber
+	var secret_chamber_room = $"Avalonia/Secret Chamber"
 	var sword = load_item("AthenaSword")
-	$"Secret Chamber".add_item(sword)
+	secret_chamber_room.add_item(sword)
+	secret_chamber_room.connect_exit_unlocked("sewers", $Avalonia/Sewers, "secret chamber")
 	
+	# TODO: Update other room connections and items/NPCs as necessary
 
 func load_item(item_name: String):
 	return load("res://items/" + item_name + ".tres")

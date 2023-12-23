@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource( 1 )
-item_name = "sword"
+item_name = "athenas sword"
 item_type = 1
-item_description = "Item Description"
+item_description = ""
