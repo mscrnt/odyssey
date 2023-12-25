@@ -49,6 +49,7 @@ margin_right = 303.0
 margin_bottom = -115.0
 room_name = "Home"
 room_description = "your virtual home in Odyssey VR."
+is_hub = true
 
 [node name="Avalonia" type="Node" parent="RoomManager"]
 
@@ -59,7 +60,7 @@ margin_right = 1064.0
 margin_bottom = -450.0
 room_name = "Central Avalonia"
 room_description = "a bustling nexus of the mystical land of Avalonia, teeming with life and activity. The Grand Castle, visible from miles away, dominates the skyline to the north,, symbolizing strength and wisdom."
-hub = true
+is_hub = true
 
 [node name="Mystic Market" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 531.0
@@ -120,6 +121,7 @@ margin_bottom = -738.0
 room_name = "Secret Chamber"
 room_description = "concealed behind a hidden door in the Royal Library, the Secret Chamber holds the most confidential archives and artifacts of the kingdom. The chamber, shrouded in mystery, is said to contain powerful relics and forbidden knowledge.
 "
+is_hidden = true
 
 [node name="Sewers" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_bottom = -1.0

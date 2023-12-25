@@ -6,11 +6,21 @@
 [resource]
 script = ExtResource( 1 )
 npc_name = "Athena"
-npc_description = "Athena is a strategic and brave co-op player, known for her wisdom and valor. She wears gleaming armor and wields a shield adorned with an owl. Her leadership and quick thinking make her an invaluable ally, turning the tide in critical moments of gameplay."
-initial_dialog = "Thanks for meeting me. I have no idea what's going on, but I'm glad you're here.
-I'm not sure what to do next. I think we should split up and explore the area.
-Maybe the Grand Castle has some answers, or maybe the Library.
-Once you figure out anything, come meet me in Diablo Realm
-You should have it unlocked if gave Athena her sword back."
+display_name = "Display Name"
+npc_description = "As you observe Athena, you notice her distinct warrior-like appearance. She stands tall and confident, exuding an aura of strength and resilience. Her outfit, a blend of practical and rugged attire, is designed for agility and protection. It's adorned with subtle, intricate patterns that hint at her adventurous spirit. Her eyes sparkle with a mix of intelligence and warmth, suggesting she's a reliable ally and a formidable presence. Athena's demeanor is welcoming yet assertive, indicating she's ready for any challenge that comes her way. As a friend and a seasoned explorer, her presence reassures you of the exciting adventures that lie ahead.
+"
+examine_text = "As you observe Athena, you notice her distinct warrior-like appearance. She stands tall and confident, exuding an aura of strength and resilience. Her outfit, a blend of practical and rugged attire, is designed for agility and protection. It's adorned with subtle, intricate patterns that hint at her adventurous spirit. Her eyes sparkle with a mix of intelligence and warmth, suggesting she's a reliable ally and a formidable presence. Athena's demeanor is welcoming yet assertive, indicating she's ready for any challenge that comes her way. As a friend and a seasoned explorer, her presence reassures you of the exciting adventures that lie ahead.
+"
+initial_dialog = "Hey, there you are!!! 
+
+I need your help. 
+
+I was looting the castle and I almost got caught. I had to stash my stuff in a secret chamber near the library.
+
+I can't show my face in there again. Can you get it for me.
+
+ You can use the \"go\" command to move around within a world.
+
+Also, don't forget to use 'help'"
 post_quest_dialog = "Awesome. You finished the quest. Let's go!"
 quest_item = ExtResource( 2 )
