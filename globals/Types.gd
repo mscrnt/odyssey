@@ -11,6 +11,7 @@ const COLOR_ITEM = Color("#94b9ff")
 const COLOR_SPEECH = Color("#c3ff94")
 const COLOR_LOCATION = Color("#f7c07c")
 const COLOR_SYSTEM = Color("#e5e585")
+const COLOR_PORTAL = Color("#BF55EC")
 
 func wrap_npc_text(text: String) -> String:
 	return "[color=#%s]%s[/color]" % [COLOR_NPC.to_html(), text]
@@ -26,3 +27,6 @@ func wrap_location_text(text: String) -> String:
 
 func wrap_system_text(text: String) -> String:
 	return "[color=#%s]%s[/color]" % [COLOR_SYSTEM.to_html(), text]
+
+func wrap_portal_text(text: String) -> String:
+	return "[color=#%s]%s[/color]" % [COLOR_PORTAL.to_html(), text]

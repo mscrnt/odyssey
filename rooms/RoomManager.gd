@@ -1,9 +1,17 @@
 extends Node
 
+func initialize(player):
+	for i in range(get_child_count()):
+		var room = get_child(i)
+		if room is GameRoom:
+			room.player = player  # Set the player reference in each GameRoom
+
 func _ready() -> void:
 	# Home
 	var home_room = $Home
-	home_room.connect_exit_unlocked("central avalonia", $"Avalonia/Central Avalonia", "home")
+#	home_room.connect_exit_unlocked("central avalonia", $"Avalonia/Central Avalonia", "home")
+	
+	## World - Avalonia
 	
 	# Central Avalonia
 	var central_avalonia_room = $"Avalonia/Central Avalonia"
@@ -47,3 +55,4 @@ func load_item(item_name: String):
 	
 func load_npc(npc_name: String):
 	return load("res://npcs/" + npc_name + ".tres")
+

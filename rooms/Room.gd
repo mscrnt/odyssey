@@ -6,11 +6,15 @@ export (String) var room_name = "Room Name" setget set_room_name
 export (String) var display_name = "Display Name"
 export (String, MULTILINE) var room_description = "This is the description of the room." setget set_room_description
 export (String, MULTILINE) var examine_text = "This is text that appears when you examine this room."
-export (bool) var hub = false
+export (bool) var is_hub = false
+export (bool) var is_hidden = false
 
 var exits: Dictionary = {}
 var npcs: Array = []
 var items: Array = []
+
+var player = null
+
 
 func set_room_name(new_name: String):
 	$MarginContainer/Rows/RoomName.text = new_name
@@ -75,8 +79,20 @@ func get_item_description() -> String:
 			item_string += Types.wrap_item_text(item.item_name)
 	return "Items: " + item_string + "\n"
 
+
 func get_exit_description() -> String:
-	return "Exits: " + Types.wrap_location_text(PoolStringArray(exits.keys()).join("[/color] | [color=#f7c07c]"))
+	if room_name == "Home" and player:
+		var fast_travel_locations = player.get_fast_travel_locations()
+		
+		# Filter out "home" from the fast travel locations
+		fast_travel_locations.erase("home")
+
+		var fast_travel_descriptions = PoolStringArray(fast_travel_locations).join("[/color] | [color=#f7c07c]")
+		return "Portals: " + Types.wrap_portal_text(fast_travel_descriptions)
+	else:
+		# Default behavior for non-Home rooms
+		var exit_keys = PoolStringArray(exits.keys()).join(" | ")
+		return "Exits: " + Types.wrap_location_text(PoolStringArray(exits.keys()).join("[/color] | [color=#f7c07c]"))
 
 func connect_exit_unlocked(direction: String, room, room_2_ovr_name = "null"):
 	return _connect_exit(direction, room, false, room_2_ovr_name)
@@ -117,3 +133,8 @@ func _connect_exit(direction: String, room, is_locked: bool = false, room_2_ovr_
 				printerr("Tried to connect invalid direction: %s", direction)
 	
 	return exit
+
+
+		
+	
+	

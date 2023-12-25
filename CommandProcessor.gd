@@ -6,6 +6,7 @@ signal room_updated(current_room)
 
 var current_room = null
 var player = null
+var room_manager = null
 
 # warning-ignore:shadowed_variable
 func initialize(starting_room, player) -> String:
@@ -23,6 +24,7 @@ func process_command(input: String) -> String:
 		"use": "^use (.+) on (.+)$",
 		"examine": "^examine (.+)$",
 		"go": "^go (.+)$",
+		"portal": "^portal (.+)$",
 		"take": "^take (.+)$",
 		"drop": "^drop (.+)$",
 		"talk": "^talk to (.+)$"
@@ -42,6 +44,8 @@ func process_command(input: String) -> String:
 					return examine(command_details[1].strip_edges())
 				"go":
 					return go(command_details[1].strip_edges())
+				"portal":
+					return portal(command_details[1].strip_edges())
 				"take":
 					return take(command_details[1].strip_edges())
 				"drop":
@@ -58,6 +62,8 @@ func process_command(input: String) -> String:
 				return inventory()
 			"help":
 				return help()
+			"portals":
+				return list_portals()
 			"examine":
 				return Types.wrap_system_text("Examine " + Types.wrap_item_text("what?"))
 			"give":
@@ -66,6 +72,8 @@ func process_command(input: String) -> String:
 				return Types.wrap_system_text("Use " + Types.wrap_item_text("what") + " to " + Types.wrap_npc_text("what?") + " Example: ") + "use " + Types.wrap_item_text("[item]") + " on " + Types.wrap_npc_text("[thing]") + "."
 			"go":
 				return Types.wrap_system_text("Go " + Types.wrap_location_text("where?"))
+			"portal":
+				return Types.wrap_system_text("Portal " + Types.wrap_location_text("where? \n" + list_portals()))
 			"take":
 				return Types.wrap_system_text("Take " + Types.wrap_item_text("what?"))
 			"drop":
@@ -94,6 +102,63 @@ func go(location_name: String) -> String:
 		return PoolStringArray(["You go to " + Types.wrap_location_text(location_name) + "\n", change_response]).join("\n")
 	else:
 		return Types.wrap_system_text("This room has no exit to " + Types.wrap_location_text(location_name))
+
+func list_portals() -> String:
+	var fast_travel_locations = player.get_fast_travel_locations()
+	var filtered_locations = []
+
+	# Filter out the current room from the list of fast travel locations
+	for location in fast_travel_locations:
+		if current_room and location.to_lower() != current_room.room_name.to_lower():
+			filtered_locations.append(location)
+
+	var fast_travel_descriptions = PoolStringArray(filtered_locations).join("[/color] | [color=#BF55EC]")
+	return "Portals: " + Types.wrap_portal_text(fast_travel_descriptions)
+
+
+func portal(world_keyword: String) -> String:
+	world_keyword = world_keyword.to_lower().strip_edges()
+
+	# Check if the player is already in the requested location
+	if current_room and current_room.room_name.to_lower() == world_keyword:
+		return Types.wrap_system_text("You are already in " + Types.wrap_location_text(current_room.room_name) + ".")
+		
+	if world_keyword == "home":
+		var home_room = room_manager.get_node("Home")  
+		if home_room:
+			return change_room(home_room)
+		else:
+			return Types.wrap_system_text("Home location not found.")
+
+
+	var fast_travel_locations = player.get_fast_travel_locations()
+
+	# Confirm if the player has access to this world's hub by checking their fast travel locations.
+	var fast_travel_available = false
+	for location_name in fast_travel_locations:
+		if location_name.to_lower() == world_keyword:
+			fast_travel_available = true
+			break
+
+	if not fast_travel_available:
+		return Types.wrap_system_text("You do not have access to " + Types.wrap_location_text(world_keyword) + " for fast travel.")
+
+	# Find the hub within this world by comparing in lowercase
+	var world_node = null
+	for i in range(room_manager.get_child_count()):
+		var child = room_manager.get_child(i)
+		if child.name.to_lower() == world_keyword:
+			world_node = child
+			break
+
+	if not world_node:
+		return Types.wrap_system_text("The world " + Types.wrap_location_text(world_keyword) + " does not exist.")
+
+	for child in world_node.get_children():
+		if "is_hub" in child and child.is_hub:
+			return change_room(child)
+
+	return Types.wrap_system_text("No hub found in the world of " + Types.wrap_location_text(world_keyword) + ".")
 
 
 	
@@ -225,14 +290,16 @@ func help() -> String:
 	return PoolStringArray([
 		Types.wrap_system_text("Available commands:"),
 		" - go " + Types.wrap_location_text("[location]") + ": " + Types.wrap_system_text("Example:") + " 'go " + Types.wrap_location_text("central avalonia") + "'",
+		" - portal " + Types.wrap_portal_text("[world]") + ": " + Types.wrap_system_text("Example:") + " 'portal " + Types.wrap_portal_text("avalonia") + "'",
 		" - examine " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'examine " + Types.wrap_item_text("door") + "'",
 		" - take " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'take " + Types.wrap_item_text("enchanted sword") + "'",
 		" - drop " + Types.wrap_item_text("[item]") + ": " + Types.wrap_system_text("Example:") + " 'drop " + Types.wrap_item_text("mystical shield") + "'",
 		" - use " + Types.wrap_item_text("[item]") + " on " + Types.wrap_location_text("[object]") + ": " + Types.wrap_system_text("Example:") + " 'use " + Types.wrap_item_text("key") + " on " + Types.wrap_location_text("stone door") + "'",
 		" - talk to " + Types.wrap_npc_text("[npc]") + ": " + Types.wrap_system_text("Example:") + " 'talk to " + Types.wrap_npc_text("merchant lorenzo") + "'",
 		" - give " + Types.wrap_item_text("[item]") + " to " + Types.wrap_npc_text("[npc]") + ": " + Types.wrap_system_text("Example:") + " 'give " + Types.wrap_item_text("ruby") + " to " + Types.wrap_npc_text("queen") + "'",
-		" - inventory: 'inventory'",
-		" - help: 'help'"
+		" - inventory " + Types.wrap_system_text('Displays contents of your inventory'),
+		" - portals " + Types.wrap_system_text('Displays available fast travel locations'),
+		" - help " + Types.wrap_system_text('Displays this message ;)'),
 	]).join("\n")
 
 
