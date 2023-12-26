@@ -62,31 +62,6 @@ room_name = "Central Avalonia"
 room_description = "a bustling nexus of the mystical land of Avalonia, teeming with life and activity. The Grand Castle, visible from miles away, dominates the skyline to the north,, symbolizing strength and wisdom."
 is_hub = true
 
-[node name="Mystic Market" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
-margin_left = 531.0
-margin_top = -746.0
-margin_right = 781.0
-margin_bottom = -364.0
-room_name = "Mystic Market"
-room_description = "a bustling hub in the heart of Avalonia. The Mystic Market is a sensory overload of sights, sounds, and scents. Stalls and shops line the crowded streets, offering a plethora of magical artifacts and exotic goods. The air is filled with the aroma of mystical incense, the chatter of bargaining customers, and the occasional sparkle of a newly cast spell.
-"
-
-[node name="Grand Castle" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
-margin_left = 820.0
-margin_top = -1046.0
-margin_right = 1070.0
-margin_bottom = -736.0
-room_name = "The Grand Castle"
-room_description = "dominating the skyline of Central Avalonia... The Grand Castle is a beacon of power and history. Its towering spires and fortified walls are a testament to the ancient magic and architecture of Avalonia. The castle is a labyrinth of grand halls and secret passages, each echoing with tales of yore."
-
-[node name="Hall of Elders" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
-margin_left = 818.0
-margin_top = -435.0
-margin_right = 1068.0
-margin_bottom = -77.0
-room_name = "The Hall of Elders"
-room_description = " a sanctum of ancient wisdom and revered traditions. Majestic in its design, the hall features towering columns, intricate murals depicting the history of Avalonia, and shelves lined with age-old tomes and artifacts. The air is filled with a serene silence, occasionally broken by the soft murmur of scholars and the rustling of parchment."
-
 [node name="Grand Courtyard" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 542.0
 margin_top = -973.0
@@ -103,6 +78,31 @@ margin_bottom = -1113.0
 room_name = "The Throne Room"
 room_description = "the heart of the Grand Castle. The Throne Room is a grandiose hall adorned with ornate tapestries and gleaming armor. The throne itself, a masterpiece of craftsmanship, sits majestically at the far end, a symbol of the kingdom's enduring legacy.
 "
+
+[node name="Grand Castle" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
+margin_left = 820.0
+margin_top = -1046.0
+margin_right = 1070.0
+margin_bottom = -736.0
+room_name = "The Grand Castle"
+room_description = "dominating the skyline of Central Avalonia... The Grand Castle is a beacon of power and history. Its towering spires and fortified walls are a testament to the ancient magic and architecture of Avalonia. The castle is a labyrinth of grand halls and secret passages, each echoing with tales of yore."
+
+[node name="Mystic Market" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
+margin_left = 531.0
+margin_top = -746.0
+margin_right = 781.0
+margin_bottom = -364.0
+room_name = "Mystic Market"
+room_description = "a bustling hub in the heart of Avalonia. The Mystic Market is a sensory overload of sights, sounds, and scents. Stalls and shops line the crowded streets, offering a plethora of magical artifacts and exotic goods. The air is filled with the aroma of mystical incense, the chatter of bargaining customers, and the occasional sparkle of a newly cast spell.
+"
+
+[node name="Hall of Elders" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
+margin_left = 818.0
+margin_top = -435.0
+margin_right = 1068.0
+margin_bottom = -77.0
+room_name = "The Hall of Elders"
+room_description = " a sanctum of ancient wisdom and revered traditions. Majestic in its design, the hall features towering columns, intricate murals depicting the history of Avalonia, and shelves lined with age-old tomes and artifacts. The air is filled with a serene silence, occasionally broken by the soft murmur of scholars and the rustling of parchment."
 
 [node name="Royal Library" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
 margin_left = 1211.0

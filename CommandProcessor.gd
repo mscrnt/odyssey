@@ -1,8 +1,11 @@
+# CommandProcessor.gd
+
 extends Node
 
 
 signal room_changed(new_room)
 signal room_updated(current_room)
+signal inventory_changed
 
 var current_room = null
 var player = null
@@ -167,6 +170,7 @@ func take(second_word: String) -> String:
 		if second_word.to_lower() == item.item_name.to_lower():
 			current_room.remove_item(item)
 			player.take_item(item)
+			emit_signal("inventory_changed")
 			emit_signal("room_updated", current_room)
 			return "You take the " + Types.wrap_item_text(second_word) + "."
 			
@@ -204,7 +208,6 @@ func give(command_details: String) -> String:
 			var reward = npc_to_give_to.quest_reward
 			reward.room_2_is_locked = false  # Assuming 'reward' is the exit that needs to be unlocked
 		player.drop_item(item_to_give)
-		emit_signal('room_updated', current_room)
 		return "You give the " + Types.wrap_item_text(item_name) + " to " + Types.wrap_npc_text(npc_name) + "."
 	
 	return Types.wrap_system_text(npc_name.capitalize() + " doesn't need a " + item_name.capitalize() + ".")
@@ -219,6 +222,7 @@ func drop(second_word: String) -> String:
 			current_room.add_item(item)
 			player.drop_item(item)
 			emit_signal("room_updated", current_room)
+			emit_signal("inventory_changed")
 			return "You dropped the " + Types.wrap_item_text(item.item_name) + "."
 						
 	return Types.wrap_system_text("You don't have a " + Types.wrap_item_text(second_word) + " to drop.")
@@ -247,8 +251,10 @@ func use(command_details: String) -> String:
 		if target_name == exit.room_2.room_name.to_lower() and item_to_use.use_value == exit:
 			if exit.room_2_is_locked:
 				exit.room_2_is_locked = false
-				player.drop_item(item_to_use)
-				emit_signal('room_updated', current_room)
+				if item_to_use.is_single_use:
+					player.drop_item(item_to_use)
+					emit_signal('room_updated', current_room)
+				emit_signal("inventory_changed")
 				return "You used the " + Types.wrap_item_text(item_name) + " to unlock the door to " + Types.wrap_location_text(exit.room_2.room_name) + "."
 			else:
 				return Types.wrap_system_text("The " + Types.wrap_location_text(exit.room_2.room_name) + " is not locked.")
@@ -306,5 +312,6 @@ func help() -> String:
 
 func change_room(new_room: GameRoom) -> String:
 	current_room = new_room
+	CurrentRoom.current_room = new_room
 	emit_signal("room_changed", new_room)
 	return new_room.get_full_description()
