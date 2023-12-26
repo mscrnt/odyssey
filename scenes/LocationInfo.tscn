@@ -1,59 +1,29 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://OptionButton.gd" type="Script" id=1]
-[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=2]
-[ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=3]
-[ext_resource path="res://InfoRows.gd" type="Script" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=5]
+[ext_resource path="res://scenes/LocationInfo.gd" type="Script" id=1]
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=3]
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
 
 [sub_resource type="StyleBoxEmpty" id=9]
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=10]
-
-[sub_resource type="StyleBoxEmpty" id=8]
-
 [node name="InfoRows" type="VBoxContainer"]
 margin_right = 200.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 15
-script = ExtResource( 4 )
-
-[node name="InventoryLabel" type="PanelContainer" parent="."]
-margin_right = 200.0
-margin_bottom = 31.0
-rect_min_size = Vector2( 0, 30 )
-custom_styles/panel = SubResource( 5 )
-
-[node name="InfoLabel" type="Label" parent="InventoryLabel"]
-margin_right = 200.0
-margin_bottom = 31.0
-custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/font = ExtResource( 3 )
-text = "Location"
-align = 1
+script = ExtResource( 1 )
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
-margin_top = 46.0
 margin_right = 200.0
-margin_bottom = 520.0
+margin_bottom = 570.0
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="InventoryPanel"]
 margin_right = 200.0
-margin_bottom = 474.0
+margin_bottom = 570.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -63,7 +33,7 @@ custom_constants/margin_bottom = 10
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 190.0
-margin_bottom = 464.0
+margin_bottom = 560.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 9 )
@@ -71,7 +41,7 @@ scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll"]
 margin_right = 180.0
-margin_bottom = 454.0
+margin_bottom = 550.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
@@ -85,7 +55,7 @@ custom_constants/separation = 5
 margin_right = 180.0
 margin_bottom = 21.0
 custom_colors/font_color = Color( 0.968627, 0.752941, 0.486275, 1 )
-custom_fonts/font = ExtResource( 2 )
+custom_fonts/font = ExtResource( 3 )
 text = "LOCATION"
 autowrap = true
 
@@ -94,7 +64,7 @@ margin_top = 26.0
 margin_right = 180.0
 margin_bottom = 191.0
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
-custom_fonts/font = ExtResource( 2 )
+custom_fonts/font = ExtResource( 3 )
 text = "This is the description of the room. It will display in the panel on the left when you have 'location' selected in the drop down menu."
 autowrap = true
 
@@ -108,7 +78,7 @@ custom_constants/separation = 5
 margin_right = 180.0
 margin_bottom = 44.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/normal_font = ExtResource( 2 )
+custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
 bbcode_text = "Exits: 
 Option"
@@ -121,7 +91,7 @@ margin_top = 49.0
 margin_right = 180.0
 margin_bottom = 93.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/normal_font = ExtResource( 2 )
+custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
 bbcode_text = "NPCs: 
 Option"
@@ -134,29 +104,10 @@ margin_top = 98.0
 margin_right = 180.0
 margin_bottom = 142.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/normal_font = ExtResource( 2 )
+custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
 bbcode_text = "Items: 
 Option"
 text = "Items: 
 Option"
 fit_content_height = true
-
-[node name="DropDownMenu" type="PanelContainer" parent="."]
-margin_top = 535.0
-margin_right = 200.0
-margin_bottom = 570.0
-rect_min_size = Vector2( 0, 35 )
-custom_styles/panel = SubResource( 3 )
-
-[node name="OptionButton" type="OptionButton" parent="DropDownMenu"]
-margin_right = 200.0
-margin_bottom = 35.0
-custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
-custom_fonts/font = ExtResource( 2 )
-custom_styles/hover = SubResource( 6 )
-custom_styles/pressed = SubResource( 7 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/normal = SubResource( 8 )
-align = 1
-script = ExtResource( 1 )

@@ -1,0 +1,69 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/InventoryInfo.gd" type="Script" id=1]
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[node name="InfoRows" type="VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 570.0
+rect_min_size = Vector2( 200, 0 )
+custom_constants/separation = 15
+script = ExtResource( 1 )
+
+[node name="InventoryPanel" type="PanelContainer" parent="."]
+margin_right = 200.0
+margin_bottom = 570.0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryPanel"]
+margin_right = 200.0
+margin_bottom = 570.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="Scroll" type="ScrollContainer" parent="InventoryPanel/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 190.0
+margin_bottom = 560.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 9 )
+scroll_horizontal_enabled = false
+
+[node name="Rows" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll"]
+margin_right = 180.0
+margin_bottom = 550.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="TitleSection" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll/Rows"]
+margin_right = 180.0
+custom_constants/separation = 5
+
+[node name="ListArea" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll/Rows"]
+margin_top = 5.0
+margin_right = 180.0
+margin_bottom = 49.0
+custom_constants/separation = 5
+
+[node name="InventoryList" type="RichTextLabel" parent="InventoryPanel/MarginContainer/Scroll/Rows/ListArea"]
+margin_right = 180.0
+margin_bottom = 44.0
+custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+custom_fonts/normal_font = ExtResource( 3 )
+bbcode_enabled = true
+bbcode_text = "Inventory: 
+ - Option"
+text = "Inventory: 
+ - Option"
+fit_content_height = true
