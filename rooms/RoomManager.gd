@@ -1,3 +1,5 @@
+# RoomManager.gd
+
 extends Node
 
 func initialize(player):

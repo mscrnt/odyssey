@@ -1,3 +1,5 @@
+# Room.gd
+
 tool
 extends PanelContainer
 class_name GameRoom

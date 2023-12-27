@@ -18,7 +18,7 @@ func initialize(starting_room, player) -> String:
 
 
 func process_command(input: String) -> String:
-	input = input.strip_edges()  # Trim whitespace from the command
+	input = input.strip_edges() 
 	var regex = RegEx.new()
 	
 	# Use regex for multi-word command processing
@@ -144,7 +144,7 @@ func portal(world_keyword: String) -> String:
 			break
 
 	if not fast_travel_available:
-		return Types.wrap_system_text("You do not have access to " + Types.wrap_location_text(world_keyword) + " for fast travel.")
+		return Types.wrap_system_text("You do not have access to '" + Types.wrap_location_text(world_keyword) + "' for fast travel.")
 
 	# Find the hub within this world by comparing in lowercase
 	var world_node = null
@@ -155,7 +155,7 @@ func portal(world_keyword: String) -> String:
 			break
 
 	if not world_node:
-		return Types.wrap_system_text("The world " + Types.wrap_location_text(world_keyword) + " does not exist.")
+		return Types.wrap_system_text("The world '" + Types.wrap_location_text(world_keyword) + "' does not exist.")
 
 	for child in world_node.get_children():
 		if "is_hub" in child and child.is_hub:
@@ -206,7 +206,7 @@ func give(command_details: String) -> String:
 		npc_to_give_to.has_received_quest_item = true
 		if npc_to_give_to.quest_reward != null:
 			var reward = npc_to_give_to.quest_reward
-			reward.room_2_is_locked = false  # Assuming 'reward' is the exit that needs to be unlocked
+			reward.room_2_is_locked = false
 		player.drop_item(item_to_give)
 		return "You give the " + Types.wrap_item_text(item_name) + " to " + Types.wrap_npc_text(npc_name) + "."
 	
@@ -245,7 +245,7 @@ func use(command_details: String) -> String:
 			break
 
 	if not item_to_use:
-		return Types.wrap_system_text("You don't have a " + Types.wrap_item_text(item_name) + " to use.")
+		return Types.wrap_system_text("You don't have a '" + Types.wrap_item_text(item_name) + "' to use.")
 
 	for exit in current_room.exits.values():
 		if target_name == exit.room_2.room_name.to_lower() and item_to_use.use_value == exit:
@@ -259,7 +259,7 @@ func use(command_details: String) -> String:
 			else:
 				return Types.wrap_system_text("The " + Types.wrap_location_text(exit.room_2.room_name) + " is not locked.")
 
-	return Types.wrap_system_text("There's nothing to use the " + Types.wrap_item_text(item_name) + " on here.")
+	return Types.wrap_system_text("There's nothing to use the '" + Types.wrap_item_text(item_name) + "' on here.")
 
 func examine(target_name: String) -> String:
 	target_name = target_name.to_lower()
@@ -290,7 +290,7 @@ func talk(second_word: String) -> String:
 			var dialog = npc.post_quest_dialog if npc.has_received_quest_item else npc.initial_dialog
 			return Types.wrap_npc_text(npc.npc_name + ": ") + Types.wrap_speech_text("\"" + dialog + "\"")
 	
-	return Types.wrap_system_text(Types.wrap_npc_text(second_word) + " is not in the area")
+	return Types.wrap_system_text(Types.wrap_npc_text(second_word) + " is not in the area.")
 
 func help() -> String:
 	return PoolStringArray([
