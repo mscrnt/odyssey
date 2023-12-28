@@ -21,6 +21,8 @@ I can't show my face in there again. Can you get it for me.
 
  You can use the \"go\" command to move around within a world.
 
-Also, don't forget to use 'help'"
+Also, don't forget to use the 'help' command.
+
+Thanks!"
 post_quest_dialog = "Awesome. You finished the quest. Let's go!"
 quest_item = ExtResource( 2 )

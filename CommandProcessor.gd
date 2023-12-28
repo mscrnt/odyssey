@@ -288,7 +288,7 @@ func talk(second_word: String) -> String:
 	for npc in current_room.npcs:
 		if npc.npc_name.to_lower() == second_word:
 			var dialog = npc.post_quest_dialog if npc.has_received_quest_item else npc.initial_dialog
-			return Types.wrap_npc_text(npc.npc_name + ": ") + Types.wrap_speech_text("\"" + dialog + "\"")
+			return Types.wrap_npc_text(npc.npc_name + ": \n") + Types.wrap_speech_text(dialog)
 	
 	return Types.wrap_system_text(Types.wrap_npc_text(second_word) + " is not in the area.")
 

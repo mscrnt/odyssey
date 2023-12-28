@@ -1,19 +1,40 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://OptionButton.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=2]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=3]
 [ext_resource path="res://InfoRows.gd" type="Script" id=4]
+[ext_resource path="res://top_bar/MenuButtons.gd" type="Script" id=5]
+[ext_resource path="res://SettingsDialog.tscn" type="PackedScene" id=6]
+
+[sub_resource type="StyleBoxFlat" id=11]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxEmpty" id=13]
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=9]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=6]
 
@@ -30,14 +51,83 @@ rect_min_size = Vector2( 200, 0 )
 custom_constants/separation = 15
 script = ExtResource( 4 )
 
+[node name="MenuBar" type="PanelContainer" parent="."]
+margin_right = 225.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 225, 35 )
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 11 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuBar"]
+margin_right = 225.0
+margin_bottom = 35.0
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+
+[node name="MenuButtons" type="HBoxContainer" parent="MenuBar/MarginContainer"]
+margin_left = 5.0
+margin_right = 220.0
+margin_bottom = 35.0
+custom_constants/separation = 0
+alignment = 1
+script = ExtResource( 5 )
+
+[node name="File" type="MenuButton" parent="MenuBar/MarginContainer/MenuButtons"]
+margin_left = 3.0
+margin_right = 43.0
+margin_bottom = 35.0
+focus_mode = 2
+custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "File"
+
+[node name="Settings" type="MenuButton" parent="MenuBar/MarginContainer/MenuButtons"]
+margin_left = 43.0
+margin_right = 120.0
+margin_bottom = 35.0
+focus_mode = 2
+custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "Settings"
+
+[node name="SettingsDialog" parent="MenuBar/MarginContainer/MenuButtons/Settings" instance=ExtResource( 6 )]
+
+[node name="Help" type="MenuButton" parent="MenuBar/MarginContainer/MenuButtons"]
+margin_left = 120.0
+margin_right = 167.0
+margin_bottom = 35.0
+custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_styles/focus = SubResource( 12 )
+enabled_focus_mode = 0
+text = "Help"
+
+[node name="Exit" type="MenuButton" parent="MenuBar/MarginContainer/MenuButtons"]
+margin_left = 167.0
+margin_right = 211.0
+margin_bottom = 35.0
+custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_styles/focus = SubResource( 12 )
+enabled_focus_mode = 0
+text = "Exit"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_top = 50.0
+margin_right = 225.0
+margin_bottom = 50.0
+custom_styles/panel = SubResource( 13 )
+
 [node name="InventoryLabel" type="PanelContainer" parent="."]
-margin_right = 200.0
-margin_bottom = 31.0
+margin_top = 65.0
+margin_right = 225.0
+margin_bottom = 96.0
 rect_min_size = Vector2( 0, 30 )
 custom_styles/panel = SubResource( 5 )
 
 [node name="InfoLabel" type="Label" parent="InventoryLabel"]
-margin_right = 200.0
+margin_top = 5.0
+margin_right = 225.0
 margin_bottom = 31.0
 custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/font = ExtResource( 3 )
@@ -45,15 +135,15 @@ text = "Location"
 align = 1
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
-margin_top = 46.0
-margin_right = 200.0
+margin_top = 111.0
+margin_right = 225.0
 margin_bottom = 520.0
 size_flags_vertical = 3
 custom_styles/panel = SubResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="InventoryPanel"]
-margin_right = 200.0
-margin_bottom = 474.0
+margin_right = 225.0
+margin_bottom = 409.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -62,27 +152,27 @@ custom_constants/margin_bottom = 10
 [node name="Scroll" type="ScrollContainer" parent="InventoryPanel/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 190.0
-margin_bottom = 464.0
+margin_right = 215.0
+margin_bottom = 399.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/bg = SubResource( 9 )
 scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll"]
-margin_right = 180.0
-margin_bottom = 454.0
+margin_right = 205.0
+margin_bottom = 389.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
 
 [node name="TitleSection" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll/Rows"]
-margin_right = 180.0
+margin_right = 205.0
 margin_bottom = 21.0
 custom_constants/separation = 5
 
 [node name="RoomNameLabel" type="Label" parent="InventoryPanel/MarginContainer/Scroll/Rows/TitleSection"]
-margin_right = 180.0
+margin_right = 205.0
 margin_bottom = 21.0
 custom_colors/font_color = Color( 0.968627, 0.752941, 0.486275, 1 )
 custom_fonts/font = ExtResource( 2 )
@@ -91,21 +181,21 @@ autowrap = true
 
 [node name="RoomDescLabel" type="Label" parent="InventoryPanel/MarginContainer/Scroll/Rows"]
 margin_top = 26.0
-margin_right = 180.0
-margin_bottom = 191.0
+margin_right = 205.0
+margin_bottom = 167.0
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 custom_fonts/font = ExtResource( 2 )
 text = "This is the description of the room. It will display in the panel on the left when you have 'location' selected in the drop down menu."
 autowrap = true
 
 [node name="ListArea" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll/Rows"]
-margin_top = 196.0
-margin_right = 180.0
-margin_bottom = 338.0
+margin_top = 172.0
+margin_right = 205.0
+margin_bottom = 314.0
 custom_constants/separation = 5
 
 [node name="ExitLabel" type="RichTextLabel" parent="InventoryPanel/MarginContainer/Scroll/Rows/ListArea"]
-margin_right = 180.0
+margin_right = 205.0
 margin_bottom = 44.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/normal_font = ExtResource( 2 )
@@ -118,7 +208,7 @@ fit_content_height = true
 
 [node name="NpcLabel" type="RichTextLabel" parent="InventoryPanel/MarginContainer/Scroll/Rows/ListArea"]
 margin_top = 49.0
-margin_right = 180.0
+margin_right = 205.0
 margin_bottom = 93.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/normal_font = ExtResource( 2 )
@@ -131,7 +221,7 @@ fit_content_height = true
 
 [node name="ItemLabel" type="RichTextLabel" parent="InventoryPanel/MarginContainer/Scroll/Rows/ListArea"]
 margin_top = 98.0
-margin_right = 180.0
+margin_right = 205.0
 margin_bottom = 142.0
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/normal_font = ExtResource( 2 )
@@ -144,13 +234,13 @@ fit_content_height = true
 
 [node name="DropDownMenu" type="PanelContainer" parent="."]
 margin_top = 535.0
-margin_right = 200.0
+margin_right = 225.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 35 )
 custom_styles/panel = SubResource( 3 )
 
 [node name="OptionButton" type="OptionButton" parent="DropDownMenu"]
-margin_right = 200.0
+margin_right = 225.0
 margin_bottom = 35.0
 custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/font = ExtResource( 2 )

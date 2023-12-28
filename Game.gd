@@ -2,15 +2,15 @@
 
 extends Control
 
-onready var game_info = $Background/MarginContainer/Columns/GameRows/GameInfo
+onready var game_info = $Background/MarginContainer/UI/GameArea/GameRows/GameInfo
 onready var command_processor = $CommandProcessor
 onready var room_manager = $RoomManager
 onready var player = $Player
-onready var info_rows = $Background/MarginContainer/Columns/InfoRows
-onready var inventory_panel = $Background/MarginContainer/Columns/InfoRows/InventoryPanel
+onready var info_rows = $Background/MarginContainer/UI/GameArea/InfoRows
+onready var inventory_panel = $Background/MarginContainer/UI/GameArea/InfoRows/InventoryPanel
 onready var location_info_scene = preload("res://scenes/LocationInfo.tscn")
 onready var inventory_info_scene = preload("res://scenes/InventoryInfo.tscn")
-onready var info_label = $Background/MarginContainer/Columns/InfoRows/InventoryLabel/InfoLabel
+onready var info_label = $Background/MarginContainer/UI/GameArea/InfoRows/InventoryLabel/InfoLabel
 
 
 var content_instances = {
@@ -49,7 +49,14 @@ func setup_game() -> void:
 	room_manager.initialize(player)
 
 	var starting_room_response = command_processor.initialize(room_manager.get_child(0), player)
-	game_info.create_response(Types.wrap_system_text("Welcome to Odyssey! You are currently in your Home. A recent email from your friend Athena has caught your attention. She urgently needs to meet with you in Avalonia. To embark on this adventure, use the 'portal' command followed by the destination to fast travel. For instance, type 'portal avalonia' to travel there. Remember, you can view a list of available commands anytime by typing 'help'. Good luck on your journey!"))
+	var response = "A recent email from your friend, " + Types.wrap_npc_text("Athena") + ", has caught your attention. "
+	response += "She urgently needs to meet with you in Avalonia. To embark on this adventure, use the " + Types.wrap_system_text("portal") + " command followed by the "
+	response += Types.wrap_portal_text("world") + " you want to fast travel to.\n\n"
+	response += "In this case, type '" + Types.wrap_system_text("portal ") + Types.wrap_portal_text("avalonia") + "' to travel there.\n\n"
+	response += "You can always view a list of available commands by typing '" + Types.wrap_system_text("help") + "'.\n\n"
+	response += "Good luck on your journey!"
+
+	game_info.create_response(response)
 	game_info.create_response(starting_room_response)
 
 

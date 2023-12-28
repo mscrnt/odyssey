@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=2]
@@ -9,12 +9,24 @@
 [ext_resource path="res://rooms/RoomManager.gd" type="Script" id=7]
 [ext_resource path="res://Player.gd" type="Script" id=8]
 [ext_resource path="res://GameInfo.tscn" type="PackedScene" id=9]
+[ext_resource path="res://top_bar/Marquee.gd" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
 
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=11]
 
@@ -136,56 +148,89 @@ anchor_bottom = 1.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Background"]
-margin_right = 1024.0
-margin_bottom = 600.0
+margin_right = 1200.0
+margin_bottom = 700.0
 custom_constants/margin_right = 15
 custom_constants/margin_top = 15
 custom_constants/margin_left = 15
 custom_constants/margin_bottom = 15
 
-[node name="Columns" type="HBoxContainer" parent="Background/MarginContainer"]
+[node name="UI" type="VBoxContainer" parent="Background/MarginContainer"]
 margin_left = 15.0
 margin_top = 15.0
-margin_right = 1009.0
-margin_bottom = 585.0
-custom_constants/separation = 15
+margin_right = 1185.0
+margin_bottom = 685.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
 
-[node name="InfoRows" parent="Background/MarginContainer/Columns" instance=ExtResource( 4 )]
-margin_right = 250.0
-rect_min_size = Vector2( 250, 0 )
+[node name="GameArea" type="HBoxContainer" parent="Background/MarginContainer/UI"]
+margin_right = 1170.0
+margin_bottom = 670.0
+size_flags_vertical = 3
+custom_constants/separation = 10
 
-[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
-margin_left = 265.0
-margin_right = 994.0
-margin_bottom = 570.0
+[node name="InfoRows" parent="Background/MarginContainer/UI/GameArea" instance=ExtResource( 4 )]
+margin_right = 225.0
+margin_bottom = 670.0
+rect_min_size = Vector2( 225, 0 )
+
+[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/UI/GameArea"]
+margin_left = 235.0
+margin_right = 1170.0
+margin_bottom = 670.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 15
 
-[node name="GameInfo" parent="Background/MarginContainer/Columns/GameRows" instance=ExtResource( 9 )]
-margin_right = 729.0
+[node name="FlashBar" type="PanelContainer" parent="Background/MarginContainer/UI/GameArea/GameRows"]
+margin_right = 935.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 0, 35 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 12 )
 
-[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
-margin_top = 535.0
-margin_right = 729.0
-margin_bottom = 570.0
+[node name="MarginContainer" type="MarginContainer" parent="Background/MarginContainer/UI/GameArea/GameRows/FlashBar"]
+margin_right = 935.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+
+[node name="Marquee" type="RichTextLabel" parent="Background/MarginContainer/UI/GameArea/GameRows/FlashBar/MarginContainer"]
+margin_right = 935.0
+margin_bottom = 35.0
+custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+bbcode_enabled = true
+bbcode_text = "Placeholder_Text"
+text = "Placeholder_Text"
+script = ExtResource( 11 )
+
+[node name="GameInfo" parent="Background/MarginContainer/UI/GameArea/GameRows" instance=ExtResource( 9 )]
+margin_top = 50.0
+margin_right = 935.0
+margin_bottom = 620.0
+
+[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/UI/GameArea/GameRows"]
+margin_top = 635.0
+margin_right = 935.0
+margin_bottom = 670.0
 rect_min_size = Vector2( 0, 35 )
 custom_styles/panel = SubResource( 3 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/Columns/GameRows/InputArea"]
-margin_right = 729.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea"]
+margin_right = 935.0
 margin_bottom = 35.0
 
-[node name="Caret" type="Label" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
+[node name="Caret" type="Label" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer"]
 margin_top = 2.0
 margin_right = 28.0
 margin_bottom = 33.0
 custom_fonts/font = ExtResource( 2 )
 text = " > "
 
-[node name="Input" type="LineEdit" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
+[node name="Input" type="LineEdit" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer"]
 margin_left = 32.0
-margin_right = 729.0
+margin_right = 935.0
 margin_bottom = 35.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
@@ -197,5 +242,5 @@ script = SubResource( 10 )
 [node name="Player" type="Node" parent="."]
 script = ExtResource( 8 )
 
-[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
-[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]
+[connection signal="text_entered" from="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
+[connection signal="text_entered" from="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]

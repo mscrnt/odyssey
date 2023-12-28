@@ -52,6 +52,12 @@ config/icon="res://icon.png"
 
 Types="*res://globals/Types.gd"
 CurrentRoom="*res://globals/CurrentRoom.gd"
+GlobalSettings="*res://globals/GlobalSettings.gd"
+
+[display]
+
+window/size/width=1200
+window/size/height=700
 
 [gui]
 

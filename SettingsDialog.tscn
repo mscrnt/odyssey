@@ -1,0 +1,100 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=1]
+[ext_resource path="res://top_bar/SettingsWindow.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
+
+[node name="WindowDialog" type="WindowDialog"]
+anchor_right = 0.276
+anchor_bottom = 0.215
+margin_right = 164.8
+margin_bottom = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/title_font = ExtResource( 1 )
+window_title = "Settings"
+resizable = true
+script = ExtResource( 2 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_right = 496.0
+margin_bottom = 152.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+margin_right = 496.0
+margin_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 486.0
+margin_bottom = 142.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+alignment = 1
+
+[node name="Content" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_right = 476.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Row_1" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/Content"]
+margin_right = 476.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="AIAssistCheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/Content/Row_1"]
+margin_top = 13.0
+margin_right = 476.0
+margin_bottom = 42.0
+custom_fonts/font = ExtResource( 1 )
+text = "AI Assist"
+
+[node name="OpenAIKeyTextBox" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer/Content/Row_1"]
+margin_top = 46.0
+margin_right = 476.0
+margin_bottom = 77.0
+custom_fonts/font = ExtResource( 1 )
+max_length = 500
+expand_to_text_length = true
+placeholder_text = "Enter OpenAI Key Here..."
+
+[node name="BottomButtons" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 105.0
+margin_right = 476.0
+margin_bottom = 132.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="SaveButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
+margin_left = 171.0
+margin_right = 219.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 1 )
+text = "Save"
+
+[node name="CancelButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomButtons"]
+margin_left = 239.0
+margin_right = 304.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 1 )
+text = "Cancel"
