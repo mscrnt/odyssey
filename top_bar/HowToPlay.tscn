@@ -1,0 +1,131 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/wellfleet_mono_24.tres" type="DynamicFont" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.145098, 0.145098, 0.145098, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PanelContainer" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 1172.0
+margin_bottom = 664.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 15
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 10.0
+margin_top = 15.0
+margin_right = 1162.0
+margin_bottom = 654.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+alignment = 1
+
+[node name="Headline" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+margin_left = 499.0
+margin_right = 652.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 153, 35 )
+rect_clip_content = true
+size_flags_horizontal = 6
+custom_styles/panel = SubResource( 3 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Headline"]
+margin_right = 153.0
+margin_bottom = 35.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 0
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 0
+
+[node name="Title" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Headline/MarginContainer"]
+margin_left = 5.0
+margin_right = 148.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+bbcode_enabled = true
+bbcode_text = "How to Play"
+text = "How to Play"
+scroll_active = false
+
+[node name="Scroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 50.0
+margin_right = 1152.0
+margin_bottom = 597.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 2 )
+scroll_horizontal_enabled = false
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Scroll"]
+margin_right = 1152.0
+margin_bottom = 547.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Scroll/Content"]
+margin_right = 1152.0
+margin_bottom = 547.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 3
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="HowToPlayText" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Scroll/Content/MarginContainer"]
+margin_left = 5.0
+margin_top = 3.0
+margin_right = 1147.0
+margin_bottom = 542.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/bold_font = ExtResource( 1 )
+custom_fonts/normal_font = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Placeholder text"
+text = "Placeholder text"
+fit_content_height = true
+
+[node name="BottomButton" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 612.0
+margin_right = 1152.0
+margin_bottom = 639.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/BottomButton"]
+margin_left = 549.0
+margin_right = 603.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 1 )
+text = "Close"

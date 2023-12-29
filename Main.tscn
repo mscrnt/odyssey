@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=2]
@@ -9,7 +9,9 @@
 [ext_resource path="res://rooms/RoomManager.gd" type="Script" id=7]
 [ext_resource path="res://Player.gd" type="Script" id=8]
 [ext_resource path="res://GameInfo.tscn" type="PackedScene" id=9]
+[ext_resource path="res://top_bar/HowToPlayDialog.tscn" type="PackedScene" id=10]
 [ext_resource path="res://top_bar/Marquee.gd" type="Script" id=11]
+[ext_resource path="res://AboutDialog.tscn" type="PackedScene" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
@@ -198,6 +200,7 @@ size_flags_horizontal = 3
 [node name="Marquee" type="RichTextLabel" parent="Background/MarginContainer/UI/GameArea/GameRows/FlashBar/MarginContainer"]
 margin_right = 935.0
 margin_bottom = 35.0
+size_flags_horizontal = 3
 custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
 custom_fonts/normal_font = ExtResource( 2 )
 bbcode_enabled = true
@@ -238,6 +241,14 @@ custom_styles/focus = SubResource( 11 )
 custom_styles/normal = SubResource( 4 )
 max_length = 48
 script = SubResource( 10 )
+
+[node name="HowToPlayDialog" parent="Background" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1200.0
+margin_bottom = 700.0
+
+[node name="AboutDialog" parent="Background" instance=ExtResource( 12 )]
 
 [node name="Player" type="Node" parent="."]
 script = ExtResource( 8 )

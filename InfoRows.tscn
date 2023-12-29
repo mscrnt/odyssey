@@ -112,7 +112,7 @@ custom_styles/focus = SubResource( 12 )
 enabled_focus_mode = 0
 text = "Exit"
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="Spacer" type="PanelContainer" parent="."]
 margin_top = 50.0
 margin_right = 225.0
 margin_bottom = 50.0
@@ -126,7 +126,6 @@ rect_min_size = Vector2( 0, 30 )
 custom_styles/panel = SubResource( 5 )
 
 [node name="InfoLabel" type="Label" parent="InventoryLabel"]
-margin_top = 5.0
 margin_right = 225.0
 margin_bottom = 31.0
 custom_colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
@@ -177,6 +176,7 @@ margin_bottom = 21.0
 custom_colors/font_color = Color( 0.968627, 0.752941, 0.486275, 1 )
 custom_fonts/font = ExtResource( 2 )
 text = "LOCATION"
+align = 1
 autowrap = true
 
 [node name="RoomDescLabel" type="Label" parent="InventoryPanel/MarginContainer/Scroll/Rows"]

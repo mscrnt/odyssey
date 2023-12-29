@@ -5,7 +5,11 @@ extends HBoxContainer
 var can_exit_game = false
 
 onready var settings_window_scene = preload("res://SettingsDialog.tscn")
+onready var how_to_play_scene = preload("res://top_bar/HowToPlayDialog.tscn")
+onready var about_scene = preload("res://AboutDialog.tscn")
 var settings_window_instance: WindowDialog = null
+var how_to_play_instance: WindowDialog = null
+var about_instance: WindowDialog = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,7 +25,7 @@ func _ready():
 	
 	# Setup Help Menu
 	var help_menu = $Help.get_popup()
-	help_menu.add_item("Commands", 4)
+	help_menu.add_item("How to Play", 4)
 	help_menu.add_item("About", 5)
 	
 	# Add and initially disable the Exit button
@@ -54,23 +58,29 @@ func _on_SettingsMenu_item_selected(id):
 			get_tree().root.add_child(settings_window_instance)  # Add to the scene tree.
 		settings_window_instance.popup_centered()  # Show the settings window.
 
-# Function to instantiate and show the settings window.
-func _show_settings_window():
-	if not settings_window_instance:
-		# Assuming 'SettingsWindow' is the name of the WindowDialog node in the scene.
-		settings_window_instance = settings_window_scene.instance().get_node("SettingsWindow")
-		get_tree().root.add_child(settings_window_instance)
-	settings_window_instance.popup()
-
 func _on_HelpMenu_item_selected(id):
 	match id:
 		4:
-			print("Commands selected")
+			print("How to Play")
+			_show_how_to_play_window()
 			# Handle commands action here
 		5:
 			print("About selected")
+			_show_about_window()
 			# Handle about action here
 
+func _show_how_to_play_window():
+	if not how_to_play_instance:
+		how_to_play_instance = how_to_play_scene.instance() as WindowDialog
+		get_tree().root.add_child(how_to_play_instance)
+	how_to_play_instance.popup()
+	
+func _show_about_window():
+	if not about_instance:
+		about_instance = about_scene.instance() as WindowDialog
+		get_tree().root.add_child(about_instance)
+	about_instance.popup()
+	
 # Callback function for exit button pressed
 func _on_Exit_button_pressed():
 	if can_exit_game:
