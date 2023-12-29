@@ -167,7 +167,7 @@ func portal(world_keyword: String) -> String:
 	
 func take(second_word: String) -> String:
 	for item in current_room.items:
-		if second_word.to_lower() == item.item_name.to_lower():
+		if second_word.to_lower() == item.display_name.to_lower():
 			current_room.remove_item(item)
 			player.take_item(item)
 			emit_signal("inventory_changed")
@@ -186,7 +186,7 @@ func give(command_details: String) -> String:
 
 	var item_to_give = null
 	for item in player.inventory:
-		if item.item_name.to_lower() == item_name:
+		if item.display_name.to_lower() == item_name:
 			item_to_give = item
 			break
 
@@ -202,7 +202,7 @@ func give(command_details: String) -> String:
 	if not npc_to_give_to:
 		return Types.wrap_system_text("There's no one named " + Types.wrap_npc_text(npc_name) + " here to give anything to.")
 	
-	if npc_to_give_to.quest_item and npc_to_give_to.quest_item.item_name.to_lower() == item_name:
+	if npc_to_give_to.quest_item and npc_to_give_to.quest_item.display_name.to_lower() == item_name:
 		npc_to_give_to.has_received_quest_item = true
 		if npc_to_give_to.quest_reward != null:
 			var reward = npc_to_give_to.quest_reward
@@ -240,7 +240,7 @@ func use(command_details: String) -> String:
 
 	var item_to_use = null
 	for item in player.inventory:
-		if item.item_name.to_lower() == item_name:
+		if item.display_name.to_lower() == item_name:
 			item_to_use = item
 			break
 

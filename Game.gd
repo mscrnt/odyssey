@@ -2,6 +2,9 @@
 
 extends Control
 
+const INPUT_RESPONSE = preload("res://input/InputResponse.tscn")
+
+
 onready var game_info = $Background/MarginContainer/UI/GameArea/GameRows/GameInfo
 onready var command_processor = $CommandProcessor
 onready var room_manager = $RoomManager
@@ -10,6 +13,8 @@ onready var info_rows = $Background/MarginContainer/UI/GameArea/InfoRows
 onready var inventory_panel = $Background/MarginContainer/UI/GameArea/InfoRows/InventoryPanel
 onready var location_info_scene = preload("res://scenes/LocationInfo.tscn")
 onready var inventory_info_scene = preload("res://scenes/InventoryInfo.tscn")
+onready var file_window = preload("res://top_bar/FileWindow.tscn")
+onready var file_window_instance: FileDialog = null
 onready var info_label = $Background/MarginContainer/UI/GameArea/InfoRows/InventoryLabel/InfoLabel
 
 
@@ -27,7 +32,12 @@ func _ready() -> void:
 	setup_game()
 	info_rows.dropdown_menu.connect("item_selected", self, "_on_dropdown_item_selected")
 	info_rows.player = player  # Ensure InfoRows has reference to the player
-
+	if not file_window_instance:
+		file_window_instance = file_window.instance() as FileDialog
+		get_tree().root.add_child(file_window_instance)
+	file_window.connect("file_save_selected", self, "_on_FileSaveSelected")
+	file_window.connect("file_load_selected", self, "_on_FileLoadSelected")
+	player.room_manager = room_manager
 	# Initialize the room info directly
 	content_instances["Location Info"] = location_info_scene.instance()
 	inventory_panel.add_child(content_instances["Location Info"])
@@ -114,3 +124,125 @@ func _on_Input_text_entered(new_text: String) -> void:
 
 	var response = command_processor.process_command(new_text)		
 	game_info.create_response_with_input(response, new_text)
+	
+func get_game_state() -> Dictionary:
+	var state = {
+		"player_state": player.get_player_state(),
+		"rooms_state": get_rooms_state(),
+		"global_settings": get_global_settings(),
+		"current_room": CurrentRoom.current_room.room_name
+	}
+	return state
+
+func get_rooms_state() -> Dictionary:
+	var rooms_state = {}
+	for i in range(room_manager.get_child_count()):
+		var room = room_manager.get_child(i)
+		if room is GameRoom:
+			rooms_state[room.room_name] = room.get_room_state()
+	return rooms_state
+	
+func get_room_by_name(room_name: String) -> GameRoom:
+	for i in range(room_manager.get_child_count()):
+		var child = room_manager.get_child(i)
+		print(child)
+		if child is GameRoom and child.room_name.to_lower() == room_name.to_lower():
+			return child
+	return null
+	
+func get_hub_from_world(world_name: String) -> GameRoom:
+	
+	if world_name.to_lower() == "home":
+		var home_room = room_manager.get_node("Home")  
+		if home_room:
+			return home_room
+			
+	var world_node = null
+	for i in range(room_manager.get_child_count()):
+		var child = room_manager.get_child(i)
+		if child.name.to_lower() == world_name.to_lower():
+			world_node = child
+			break
+
+	if world_node:
+		for child in world_node.get_children():
+			if child is GameRoom and "is_hub" in child and child.is_hub:
+				return child
+	return null
+
+func get_global_settings() -> Dictionary:
+	return {
+		"ai_assist_enabled": GlobalSettings.ai_assist_enabled,
+		"openai_key": GlobalSettings.openai_key
+	}
+
+# Function to handle file save selection
+func _on_FileSaveSelected(path: String) -> void:
+	save_game(path)
+
+# Function to handle file load selection
+func _on_FileLoadSelected(path: String) -> void:
+	load_game(path)
+
+# Modified save_game function to use the provided path
+func save_game(save_path: String) -> void:
+	var game_state = get_game_state()
+	var file = File.new()
+	if file.open(save_path, File.WRITE) == OK:
+		var json_string = JSON.print(game_state)
+		var base64_string = Marshalls.utf8_to_base64(json_string)
+		file.store_line(base64_string)
+		file.close()
+		print("Game saved successfully to ", save_path)
+	else:
+		print("Failed to save the game to ", save_path)
+
+# Function to load the game state
+func load_game(save_path: String) -> void:
+	var file = File.new()
+	if file.open(save_path, File.READ) == OK:
+		var base64_string = file.get_line()
+		var json_string = Marshalls.base64_to_utf8(base64_string)
+		var game_state = JSON.parse(json_string).result
+		set_game_state(game_state)
+		file.close()
+		print("Game loaded successfully.")
+	else:
+		print("Failed to load the game.")
+
+func set_game_state(state: Dictionary) -> void:
+	if state.has("player_state"):
+		player.set_player_state(state["player_state"])
+
+	if state.has("rooms_state"):
+		set_rooms_state(state["rooms_state"])
+
+	if state.has("global_settings"):
+		set_global_settings(state["global_settings"])
+
+	if state.has("current_room"):
+		var room_name = state["current_room"]
+		var room = room_manager.find_node(room_name, true, false)
+		if room and room is GameRoom:
+			command_processor.change_room(room)
+			_load_room_description_after_load(room)
+			
+func _load_room_description_after_load(room: GameRoom):
+	var description = null
+	description = room.get_full_description()
+	game_info.create_response(Types.wrap_system_text("Game Restored!"))
+	game_info.create_response(description)
+
+# Function to set state of all rooms
+func set_rooms_state(rooms_state: Dictionary) -> void:
+	for room_name in rooms_state.keys():
+		var room = room_manager.find_node(room_name, true, false)
+		if room and room is GameRoom:
+			room.set_room_state(rooms_state[room_name])
+
+# Function to set global settings state
+func set_global_settings(settings: Dictionary) -> void:
+	if settings.has("ai_assist_enabled"):
+		GlobalSettings.ai_assist_enabled = settings["ai_assist_enabled"]
+	if settings.has("openai_key"):
+		GlobalSettings.openai_key = settings["openai_key"]

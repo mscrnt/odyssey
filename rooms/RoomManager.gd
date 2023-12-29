@@ -58,3 +58,18 @@ func load_item(item_name: String):
 func load_npc(npc_name: String):
 	return load("res://npcs/" + npc_name + ".tres")
 
+func get_room_state() -> Array:
+	var room_states = []
+	for i in range(get_child_count()):
+		var room = get_child(i)
+		if room:
+			var room_state = room.get_room_state()
+			room_states.append(room_state)
+	return room_states
+	
+func set_room_state(room_states: Array) -> void:
+	for room_state in room_states:
+		var room_path = room_state.get("path", "")
+		var room = get_node_or_null(room_path)
+		if room:
+			room.set_room_state(room_state)

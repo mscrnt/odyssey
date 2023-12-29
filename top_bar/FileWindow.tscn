@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="FileWindow" type="FileDialog"]
+margin_left = -401.0
+margin_top = -145.0
+margin_right = -86.0
+margin_bottom = -15.0

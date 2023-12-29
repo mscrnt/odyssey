@@ -1,3 +1,5 @@
+# Item.gd
+
 extends Resource
 class_name Item
 
@@ -15,3 +17,24 @@ func initialize(item_name: String, item_type: int, item_description):
 	self.item_name = item_name
 	self.item_type = item_type
 	self.item_description = item_description
+
+func get_item_state() -> Dictionary:
+	return {
+		"item_name": item_name,
+		"item_type": item_type,
+		"is_single_use": is_single_use,
+		"item_description": item_description,
+		"use_value": use_value
+	}
+
+func set_item_state(state: Dictionary) -> void:
+	if state.has("item_name"):
+		item_name = state["item_name"]
+	if state.has("item_type"):
+		item_type = state["item_type"]
+	if state.has("is_single_use"):
+		is_single_use = state["is_single_use"]
+	if state.has("item_description"):
+		item_description = state["item_description"]
+	if state.has("use_value"):
+		use_value = state["use_value"]
