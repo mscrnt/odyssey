@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource( 1 )
-npc_name = "monk"
-display_name = "Display Name"
+npc_name = "Monk"
+display_name = "Monk"
 npc_description = "A monk. Nothing special about him"
 examine_text = "This is text that appears when you examine this npc."
 initial_dialog = "The Grand Castle is a place of history and mystery, where the past speaks to those who listen.

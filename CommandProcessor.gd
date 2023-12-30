@@ -208,6 +208,7 @@ func give(command_details: String) -> String:
 			var reward = npc_to_give_to.quest_reward
 			reward.room_2_is_locked = false
 		player.drop_item(item_to_give)
+		emit_signal("inventory_changed")
 		return "You give the " + Types.wrap_item_text(item_name) + " to " + Types.wrap_npc_text(npc_name) + "."
 	
 	return Types.wrap_system_text(npc_name.capitalize() + " doesn't need a " + item_name.capitalize() + ".")
@@ -240,7 +241,7 @@ func use(command_details: String) -> String:
 
 	var item_to_use = null
 	for item in player.inventory:
-		if item.display_name.to_lower() == item_name:
+		if item.display_name.to_lower() == item_name.to_lower():
 			item_to_use = item
 			break
 
@@ -260,6 +261,7 @@ func use(command_details: String) -> String:
 				return Types.wrap_system_text("The " + Types.wrap_location_text(exit.room_2.room_name) + " is not locked.")
 
 	return Types.wrap_system_text("There's nothing to use the '" + Types.wrap_item_text(item_name) + "' on here.")
+
 
 func examine(target_name: String) -> String:
 	target_name = target_name.to_lower()

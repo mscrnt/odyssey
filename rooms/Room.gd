@@ -4,6 +4,9 @@ tool
 extends PanelContainer
 class_name GameRoom
 
+onready var game_node = get_node("/root/Game")
+onready var room_manager = null
+
 export (String) var room_name = "Room Name" setget set_room_name
 export (String) var display_name = "Display Name"
 export (String) var world_name = "World Name"
@@ -19,14 +22,33 @@ var is_current_room: bool = false
 
 var player = null
 
+func get_use_value_for_item(target_room_name: String) -> Exit:
+	for direction in exits:
+		var exit = exits[direction]
+		if exit.room_2.room_name == target_room_name:
+			return exit
+	return null
+
+func get_room_manager() -> Node:
+	return room_manager
+
+
 func get_room_state() -> Dictionary:
 	var npc_states = []
 	for npc in npcs:
 		npc_states.append(npc.get_npc_state())
-	
+
 	var item_states = []
 	for item in items:
 		item_states.append(item.get_item_state())
+
+	var exit_states = {}
+	for direction in exits:
+		var exit = exits[direction]
+		exit_states[direction] = {
+			"room_2": exit.room_2.room_name,
+			"room_2_is_locked": exit.room_2_is_locked,
+		}
 
 	var state = {
 		"room_name": room_name,
@@ -34,12 +56,14 @@ func get_room_state() -> Dictionary:
 		"room_description": room_description,
 		"is_hub": is_hub,
 		"is_hidden": is_hidden,
+		"exit_states": exit_states,
 		"npc_states": npc_states,
 		"item_states": item_states
 	}
 	return state
 
-func set_room_state(state: Dictionary) -> void:
+func set_room_state(state: Dictionary, roommanager) -> void:
+	room_manager = roommanager
 	if state.has("room_name"):
 		room_name = state["room_name"]
 	if state.has("display_name"):
@@ -50,33 +74,66 @@ func set_room_state(state: Dictionary) -> void:
 		is_hub = state["is_hub"]
 	if state.has("is_hidden"):
 		is_hidden = state["is_hidden"]
+
+	# Clear existing NPCs and items before setting new state
+	items.clear()
+
+	# Restore NPCs
 	if state.has("npc_states"):
 		for npc_state in state["npc_states"]:
-			# Find NPC by name or some unique identifier and set its state
-			var npc = find_npc_by_name(npc_state["npc_name"])
-			if npc:
-				npc.set_npc_state(npc_state)
+			var npc_name = npc_state["npc_name"]
+			var has_received_quest_item = npc_state["has_received_quest_item"]
+
+			var existing_npc = find_npc_by_name(npc_name)
+			if existing_npc:
+				existing_npc.has_received_quest_item = has_received_quest_item
+			else:
+				printerr("NPC not found:", npc_name)
+
 	if state.has("item_states"):
 		for item_state in state["item_states"]:
-			# Find Item by name or some unique identifier and set its state
-			var item = find_item_by_name(item_state["item_name"])
-			if item:
-				item.set_item_state(item_state)
-	# Restore other room-specific properties here
+			# Here, item_state is a full dictionary of the item's state
+			print(item_state)
+			var item = create_or_fetch_item(item_state)
+			items.append(item)
 
-# Helper function to find NPC by name
-func find_npc_by_name(name: String) -> NPC:
+	# Restore exits
+	if state.has("exit_states"):
+		for direction in state["exit_states"]:
+			var exit_state = state["exit_states"][direction]
+			var saved_is_locked = exit_state["room_2_is_locked"]
+			if exits.has(direction):
+				var exit = exits[direction]
+				var other_room = exit.get_other_room(self)
+				if other_room and other_room.room_name == exit_state["room_2"]:
+					# Update the is_locked state
+					if exit.room_2_is_locked != saved_is_locked:
+						exit.room_2_is_locked = saved_is_locked
+						print("Exit state updated for direction: " + direction)
+				else:
+					printerr("Connected room not found or mismatch for direction:", direction)
+			else:
+				printerr("Exit not found for direction:", direction)
+
+
+func find_npc_by_name(npc_name: String) -> NPC:
 	for npc in npcs:
-		if npc.npc_name == name:
+		if npc.npc_name == npc_name:
 			return npc
 	return null
 
-# Helper function to find Item by name
-func find_item_by_name(name: String) -> Item:
-	for item in items:
-		if item.item_name == name:
-			return item
-	return null
+func create_or_fetch_item(item_state: Dictionary) -> Item:
+	var item_name = item_state["item_name"]
+	var item: Item
+
+	# If the item does not exist, create a new one
+	item = room_manager.load_item(item_name) as Item
+	if item:
+		item.set_item_state(item_state, room_manager)
+	else:
+		printerr("Failed to load item: ", item_name)
+	return item
+
 
 func set_room_name(new_name: String):
 	$MarginContainer/Rows/RoomName.text = new_name

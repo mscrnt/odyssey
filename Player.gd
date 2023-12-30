@@ -110,7 +110,7 @@ func create_or_fetch_item(item_data: Dictionary) -> Item:
 		# Use the instance of room_manager to load the item
 		item = room_manager.load_item(item_name) as Item
 		if item:
-			item.set_item_state(item_data)
+			item.set_item_state(item_data, room_manager)
 		else:
 			printerr("Failed to load item: " + item_name)
 

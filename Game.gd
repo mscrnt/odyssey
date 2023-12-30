@@ -31,7 +31,7 @@ var content_labels = {
 func _ready() -> void:
 	setup_game()
 	info_rows.dropdown_menu.connect("item_selected", self, "_on_dropdown_item_selected")
-	info_rows.player = player  # Ensure InfoRows has reference to the player
+	info_rows.player = player 
 	if not file_window_instance:
 		file_window_instance = file_window.instance() as FileDialog
 		get_tree().root.add_child(file_window_instance)
@@ -56,7 +56,7 @@ func setup_game() -> void:
 	player.connect_portal("avalonia", $"RoomManager/Avalonia/Central Avalonia")
 	player.connect_portal("home", $RoomManager/Home)
 	command_processor.room_manager = room_manager
-	room_manager.initialize(player)
+	room_manager.initialize(player, room_manager)
 
 	var starting_room_response = command_processor.initialize(room_manager.get_child(0), player)
 	var response = "A recent email from your friend, " + Types.wrap_npc_text("Athena") + ", has caught your attention. "
@@ -136,18 +136,30 @@ func get_game_state() -> Dictionary:
 
 func get_rooms_state() -> Dictionary:
 	var rooms_state = {}
+	# First, get the state of top-level rooms (e.g., 'Home')
 	for i in range(room_manager.get_child_count()):
 		var room = room_manager.get_child(i)
 		if room is GameRoom:
-			rooms_state[room.room_name] = room.get_room_state()
+			rooms_state[room.get_path()] = room.get_room_state()  # Use get_path() to uniquely identify rooms
+
+	# Now, get the state of rooms nested within world nodes
+	for i in range(room_manager.get_child_count()):
+		var world_node = room_manager.get_child(i)
+		if world_node.get_child_count() > 0:
+			for j in range(world_node.get_child_count()):
+				var nested_room = world_node.get_child(j)
+				if nested_room is GameRoom:
+					rooms_state[nested_room.get_path()] = nested_room.get_room_state()  # Use get_path() for nested rooms as well
+
 	return rooms_state
 	
 func get_room_by_name(room_name: String) -> GameRoom:
 	for i in range(room_manager.get_child_count()):
-		var child = room_manager.get_child(i)
-		print(child)
-		if child is GameRoom and child.room_name.to_lower() == room_name.to_lower():
-			return child
+		var world_node = room_manager.get_child(i)
+		for j in range(world_node.get_child_count()):
+			var child = world_node.get_child(j)
+			if child is GameRoom and child.room_name == room_name:
+				return child
 	return null
 	
 func get_hub_from_world(world_name: String) -> GameRoom:
@@ -212,15 +224,20 @@ func load_game(save_path: String) -> void:
 
 func set_game_state(state: Dictionary) -> void:
 	if state.has("player_state"):
+		print("Setting Player State")
 		player.set_player_state(state["player_state"])
 
+
 	if state.has("rooms_state"):
+		print("Setting Room State")
 		set_rooms_state(state["rooms_state"])
 
 	if state.has("global_settings"):
+		print("Setting Global Settings")
 		set_global_settings(state["global_settings"])
 
 	if state.has("current_room"):
+		print("Setting Current Room")
 		var room_name = state["current_room"]
 		var room = room_manager.find_node(room_name, true, false)
 		if room and room is GameRoom:
@@ -235,10 +252,10 @@ func _load_room_description_after_load(room: GameRoom):
 
 # Function to set state of all rooms
 func set_rooms_state(rooms_state: Dictionary) -> void:
-	for room_name in rooms_state.keys():
-		var room = room_manager.find_node(room_name, true, false)
+	for room_path in rooms_state.keys():
+		var room = get_node_or_null(room_path)
 		if room and room is GameRoom:
-			room.set_room_state(rooms_state[room_name])
+			room.set_room_state(rooms_state[room_path], room_manager)
 
 # Function to set global settings state
 func set_global_settings(settings: Dictionary) -> void:
