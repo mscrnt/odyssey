@@ -1,0 +1,30 @@
+[gd_resource type="Theme" load_steps=5 format=2]
+
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=19]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxEmpty" id=20]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+MenuButton/fonts/font = ExtResource( 1 )
+PopupMenu/fonts/font = ExtResource( 1 )
+PopupMenu/styles/labeled_separator_left = SubResource( 19 )
+PopupMenu/styles/labeled_separator_right = SubResource( 20 )
+PopupMenu/styles/panel = SubResource( 18 )

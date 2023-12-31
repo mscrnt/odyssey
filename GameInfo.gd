@@ -1,3 +1,5 @@
+# GameInfo.gd
+
 extends PanelContainer
 
 const INPUT_RESPONSE = preload("res://input/InputResponse.tscn")
@@ -10,7 +12,9 @@ onready var scroll = $Scroll
 onready var scrollbar = scroll.get_v_scrollbar()
 onready var history_rows = $Scroll/HistoryRows
 
-
+func get_history_rows() -> VBoxContainer:
+	return history_rows
+	
 func _ready() -> void:
 	scrollbar.connect("changed", self, "_handle_scrollbar_change")
 	max_scroll_length = scrollbar.max_value
@@ -28,8 +32,37 @@ func create_response_with_input(response_text: String, input_text: String):
 	_add_response_to_game(input_response)
 	input_response.set_text(response_text, input_text)
 
+func get_history_data() -> Array:
+	var history_data = []
+	for child in history_rows.get_children():
+		history_data.append(child.get_save_data())
+	return history_data
 
+# This function will recreate the history from the saved data
+func restore_history(history_data: Array) -> void:
+	# First, clear the current history
+	for child in history_rows.get_children():
+		child.queue_free()
 
+	# Now, recreate each response from the saved data
+	for data in history_data:
+		if data.has("response_text"):
+			if data["input_text"] == "":
+				create_response(data["response_text"])
+			else:
+				create_response_with_input(data["response_text"], data["input_text"])
+				
+func reset_state():
+	# Clear the history of responses
+	for child in history_rows.get_children():
+		child.queue_free()
+
+	# Reset any other necessary state variables
+	max_scroll_length = 0
+	should_zebra = true
+
+	# Optionally, you can add a default welcome or reset message
+	#create_response("Game reset. Welcome back!")
 ##### PRIVATE #####
 func _handle_scrollbar_change():
 	if max_scroll_length != scrollbar.max_value:

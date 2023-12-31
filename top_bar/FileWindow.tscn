@@ -1,7 +1,84 @@
-[gd_scene format=2]
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://top_bar/FileWindow.gd" type="Script" id=1]
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=11]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxFlat" id=16]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="StyleBoxFlat" id=15]
+bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id=1]
+default_font = ExtResource( 2 )
+Button/styles/disabled = SubResource( 11 )
+Button/styles/focus = SubResource( 9 )
+Button/styles/hover = SubResource( 10 )
+Button/styles/normal = SubResource( 2 )
+Label/colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+Label/styles/normal = SubResource( 7 )
+LineEdit/styles/normal = SubResource( 3 )
+MarginContainer/constants/margin_bottom = 0
+MarginContainer/constants/margin_left = 0
+MarginContainer/constants/margin_right = 0
+MenuButton/fonts/font = ExtResource( 2 )
+OptionButton/styles/focus = SubResource( 18 )
+OptionButton/styles/hover = SubResource( 19 )
+OptionButton/styles/normal = SubResource( 16 )
+OptionButton/styles/pressed = SubResource( 17 )
+TabContainer/styles/panel = SubResource( 5 )
+TextEdit/styles/normal = SubResource( 12 )
+Tree/colors/drop_position_color = Color( 1, 0.3, 0.2, 1 )
+Tree/styles/bg = SubResource( 14 )
+Tree/styles/title_button_hover = SubResource( 13 )
+WindowDialog/colors/title_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+WindowDialog/styles/panel = SubResource( 15 )
 
 [node name="FileWindow" type="FileDialog"]
-margin_left = -401.0
-margin_top = -145.0
-margin_right = -86.0
-margin_bottom = -15.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+theme = SubResource( 1 )
+script = ExtResource( 1 )

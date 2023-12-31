@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://OptionButton.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://top_bar/MenuButtons.gd" type="Script" id=5]
 [ext_resource path="res://SettingsDialog.tscn" type="PackedScene" id=6]
 [ext_resource path="res://top_bar/FileWindow.tscn" type="PackedScene" id=7]
-[ext_resource path="res://top_bar/FileWindow.gd" type="Script" id=8]
+[ext_resource path="res://menubuttontheme.tres" type="Theme" id=8]
 
 [sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
@@ -15,6 +15,10 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id=14]
+
+[sub_resource type="StyleBoxEmpty" id=15]
 
 [sub_resource type="StyleBoxEmpty" id=12]
 
@@ -30,6 +34,18 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="StyleBoxFlat" id=16]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id=17]
+PopupMenu/colors/font_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+PopupMenu/fonts/font = ExtResource( 2 )
+PopupMenu/styles/panel = SubResource( 16 )
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
@@ -79,20 +95,23 @@ margin_left = 3.0
 margin_right = 43.0
 margin_bottom = 35.0
 focus_mode = 2
+theme = ExtResource( 8 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 custom_fonts/font = ExtResource( 2 )
+custom_styles/focus = SubResource( 14 )
 text = "File"
 
 [node name="FileWindow" parent="MenuBar/MarginContainer/MenuButtons/File" instance=ExtResource( 7 )]
-script = ExtResource( 8 )
 
 [node name="Settings" type="MenuButton" parent="MenuBar/MarginContainer/MenuButtons"]
 margin_left = 43.0
 margin_right = 120.0
 margin_bottom = 35.0
 focus_mode = 2
+theme = ExtResource( 8 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 custom_fonts/font = ExtResource( 2 )
+custom_styles/focus = SubResource( 15 )
 text = "Settings"
 
 [node name="SettingsDialog" parent="MenuBar/MarginContainer/MenuButtons/Settings" instance=ExtResource( 6 )]
@@ -101,6 +120,7 @@ text = "Settings"
 margin_left = 120.0
 margin_right = 167.0
 margin_bottom = 35.0
+theme = ExtResource( 8 )
 custom_colors/font_color = Color( 0.643137, 0.643137, 0.643137, 1 )
 custom_fonts/font = ExtResource( 2 )
 custom_styles/focus = SubResource( 12 )
@@ -242,6 +262,7 @@ margin_top = 535.0
 margin_right = 225.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 35 )
+theme = SubResource( 17 )
 custom_styles/panel = SubResource( 3 )
 
 [node name="OptionButton" type="OptionButton" parent="DropDownMenu"]

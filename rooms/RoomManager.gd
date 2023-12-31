@@ -26,49 +26,7 @@ var item_use_value_map: Dictionary = {}
 
 
 func _ready() -> void:
-	# use_value
-	var chamber_exit = royal_library_room.connect_exit_locked("secret chamber", $"Avalonia/Secret Chamber", "royal library")
-
-	# quest_reward
-	var sewer_exit = central_avalonia_room.connect_exit_locked("sewers", $Avalonia/Sewers, "central avalonia")
-
-	# NPCs
-	var athena = load_npc("Athena")
-	var monk = load_npc("Monk")
-
-	# Items
-	var key = load_item("SecretChamberKey")
-	var sword = load_item("AthenaSword")
-	
-	# Central Avalonia
-	central_avalonia_room.connect_exit_unlocked("grand castle", $"Avalonia/Grand Castle", "central avalonia")
-	central_avalonia_room.connect_exit_unlocked("mystic market", $"Avalonia/Mystic Market", "central avalonia")
-
-	central_avalonia_room.connect_exit_unlocked("hall of elders", $"Avalonia/Hall of Elders", "central avalonia")
-	
-	# Add NPCs to Central Avalonia
-	central_avalonia_room.add_npc(athena)
-	athena.quest_reward = sewer_exit
-	
-	# The Grand Castle
-	grand_castle_room.connect_exit_unlocked("throne room", $"Avalonia/Throne Room", "grand castle")
-	grand_castle_room.connect_exit_unlocked("royal library", $"Avalonia/Royal Library", "grand castle")
-	grand_castle_room.connect_exit_unlocked("grand courtyard", $"Avalonia/Grand Courtyard", "grand castle")
-	
-	# Add NPCs to The Grand Castle
-
-	grand_castle_room.add_npc(monk)
-	
-	# The Royal Library
-	key.use_value = chamber_exit
-	royal_library_room.add_item(key)
-	item_use_value_map["SecretChamberKey"] = chamber_exit
-
-	# Secret Chamber
-
-
-	secret_chamber_room.add_item(sword)
-	secret_chamber_room.connect_exit_unlocked("sewers", $Avalonia/Sewers, "secret chamber")
+	_setup_rooms()
 
 func get_use_value_for_item(item_name: String) -> Exit:
 	var mapping = item_use_value_map.get(item_name)
@@ -105,3 +63,57 @@ func set_room_state(room_states: Array) -> void:
 		var room = get_node_or_null(room_path)
 		if room:
 			room.set_room_state(room_state)
+			
+func reset_state():
+	# Reset each GameRoom
+	for i in range(get_child_count()):
+		var room = get_child(i)
+		if room is GameRoom:
+			room.reset_state()
+
+	# Reset any global state managed by RoomManager
+	item_use_value_map.clear()
+
+	# Reinitialize the room connections and items as necessary
+	# This might involve re-calling the setup code or having a separate method to re-setup rooms
+	_setup_rooms()
+
+
+func _setup_rooms():
+	# Clear existing NPCs and items in all rooms
+#	for i in range(get_child_count()):
+#		var room = get_child(i)
+#		if room is GameRoom:
+#			room.reset_state()
+
+	# Set up initial room states as per the original game setup
+
+	# Setup exits
+	var chamber_exit = royal_library_room.connect_exit_locked("secret chamber", $"Avalonia/Secret Chamber", "royal library")
+	var sewer_exit = central_avalonia_room.connect_exit_locked("sewers", $Avalonia/Sewers, "central avalonia")
+
+	# Setup NPCs
+	var athena = load_npc("Athena")
+	var monk = load_npc("Monk")
+	central_avalonia_room.add_npc(athena)
+	grand_castle_room.add_npc(monk)
+	athena.quest_reward = sewer_exit
+
+	# Setup items
+	var key = load_item("SecretChamberKey")
+	var sword = load_item("AthenaSword")
+	royal_library_room.add_item(key)
+	secret_chamber_room.add_item(sword)
+
+	# Assign use values
+	key.use_value = chamber_exit
+	item_use_value_map["SecretChamberKey"] = chamber_exit
+
+	# Connect rooms with unlocked exits
+	central_avalonia_room.connect_exit_unlocked("grand castle", $"Avalonia/Grand Castle", "central avalonia")
+	central_avalonia_room.connect_exit_unlocked("mystic market", $"Avalonia/Mystic Market", "central avalonia")
+	central_avalonia_room.connect_exit_unlocked("hall of elders", $"Avalonia/Hall of Elders", "central avalonia")
+	grand_castle_room.connect_exit_unlocked("throne room", $"Avalonia/Throne Room", "grand castle")
+	grand_castle_room.connect_exit_unlocked("royal library", $"Avalonia/Royal Library", "grand castle")
+	grand_castle_room.connect_exit_unlocked("grand courtyard", $"Avalonia/Grand Courtyard", "grand castle")
+	secret_chamber_room.connect_exit_unlocked("sewers", $Avalonia/Sewers, "secret chamber")

@@ -115,6 +115,14 @@ func set_room_state(state: Dictionary, roommanager) -> void:
 			else:
 				printerr("Exit not found for direction:", direction)
 
+func reset_state():
+	# Clear all NPCs, items, and exits in the room
+	npcs.clear()
+	items.clear()
+	exits.clear()
+
+	is_current_room = false
+
 
 func find_npc_by_name(npc_name: String) -> NPC:
 	for npc in npcs:

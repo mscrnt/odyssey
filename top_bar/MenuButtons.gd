@@ -16,17 +16,11 @@ var about_instance: WindowDialog = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Instantiate the FileDialog instance
-	file_window_instance = file_window_scene.instance()
-	add_child(file_window_instance)
-	file_window_instance.connect("file_selected", self, "_on_FileSelected")
-	file_window_instance.connect("popup_hide", self, "_on_FileDialog_hide")
-	
 	# Setup File Menu
 	var file_menu = $File.get_popup()
-	file_menu.add_item("New Game", 0)
+	file_menu.add_item("Load", 0)
 	file_menu.add_item("Save", 1)
-	file_menu.add_item("Load", 2)
+	file_menu.add_item("New Game", 2)
 	
 	# Setup Settings Menu
 	var settings_menu = $Settings.get_popup()
@@ -47,16 +41,19 @@ func _ready():
 	help_menu.connect("id_pressed", self, "_on_HelpMenu_item_selected")
 	exit_button.connect("pressed", self, "_on_Exit_button_pressed")
 
+	
+
 # Callback functions for menu item selections
 func _on_FileMenu_item_selected(id):
 	match id:
 		0:
-			print("New Game selected")
-			# Handle new game action here
+			_show_load_dialog()
 		1:
 			_show_save_dialog()
 		2:
-			_show_load_dialog()
+			print("New Game selected")
+			game_node.initialize_game()
+
 
 func _on_SettingsMenu_item_selected(id):
 	if id == 3:  # Check if the 'Edit Settings' option was selected.
@@ -90,15 +87,31 @@ func _show_save_dialog():
 	if not file_window_instance:
 		file_window_instance = file_window_scene.instance() as FileDialog
 		get_tree().root.add_child(file_window_instance)
+		
+	file_window_instance.connect("file_selected", self, "_on_FileSelected")
+	file_window_instance.connect("popup_hide", self, "_on_FileDialog_hide")
+	var user_documents_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+	var save_dir = user_documents_dir.plus_file("OdysseyGame")
+	var save_path = save_dir.plus_file("my_save.ods") # Default save file name
+	file_window_instance.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 	file_window_instance.mode = file_window_instance.MODE_SAVE_FILE
-	file_window_instance.popup_centered_ratio(0.5)  # Popup the window at 50% of the screen size
+	file_window_instance.access = file_window_instance.ACCESS_FILESYSTEM
+	file_window_instance.popup_centered()
 
 func _show_load_dialog():
 	if not file_window_instance:
 		file_window_instance = file_window_scene.instance() as FileDialog
 		get_tree().root.add_child(file_window_instance)
+
+	file_window_instance.connect("file_selected", self, "_on_FileSelected")
+	file_window_instance.connect("popup_hide", self, "_on_FileDialog_hide")
+	var user_documents_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+	var save_dir = user_documents_dir.plus_file("OdysseyGame")
+	file_window_instance.current_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 	file_window_instance.mode = file_window_instance.MODE_OPEN_FILE
-	file_window_instance.popup_centered_ratio(0.5)  # Popup the window at 50% of the screen size
+	file_window_instance.access = file_window_instance.ACCESS_FILESYSTEM
+	file_window_instance.popup_centered()
+
 
 func _on_FileSelected(path: String):
 	if file_window_instance.mode == file_window_instance.MODE_SAVE_FILE:
@@ -107,7 +120,6 @@ func _on_FileSelected(path: String):
 	elif file_window_instance.mode == file_window_instance.MODE_OPEN_FILE:
 		print("Load game from path: ", path)
 		game_node.load_game(path)  # Call load_game function in Game.gd
-
 
 
 func _on_FileDialog_hide():

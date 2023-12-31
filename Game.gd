@@ -16,6 +16,7 @@ onready var inventory_info_scene = preload("res://scenes/InventoryInfo.tscn")
 onready var file_window = preload("res://top_bar/FileWindow.tscn")
 onready var file_window_instance: FileDialog = null
 onready var info_label = $Background/MarginContainer/UI/GameArea/InfoRows/InventoryLabel/InfoLabel
+onready var history_rows_instance = game_info.get_history_rows()
 
 
 var content_instances = {
@@ -29,46 +30,70 @@ var content_labels = {
 }
 
 func _ready() -> void:
-	setup_game()
+	initialize_game()
+
+func initialize_game():
+	# One-time setup tasks when the game first starts
+	connect_signals()
+	create_file_window_instance()
+	initialize_inventory_panel()
+	setup_game() # Call the setup_game to initialize or reset game state
+
+func connect_signals():
+	# Connect all your signals here
 	info_rows.dropdown_menu.connect("item_selected", self, "_on_dropdown_item_selected")
-	info_rows.player = player 
+	file_window.connect("file_save_selected", self, "_on_FileSaveSelected")
+	file_window.connect("file_load_selected", self, "_on_FileLoadSelected")
+	command_processor.connect("room_changed", self, "_on_room_changed")
+	command_processor.connect("room_updated", self, "_on_room_changed")
+	command_processor.connect("inventory_changed", self, "_on_inventory_changed")
+
+func create_file_window_instance():
+	# Create the file window instance
 	if not file_window_instance:
 		file_window_instance = file_window.instance() as FileDialog
 		get_tree().root.add_child(file_window_instance)
-	file_window.connect("file_save_selected", self, "_on_FileSaveSelected")
-	file_window.connect("file_load_selected", self, "_on_FileLoadSelected")
-	player.room_manager = room_manager
-	# Initialize the room info directly
-	content_instances["Location Info"] = location_info_scene.instance()
-	inventory_panel.add_child(content_instances["Location Info"])
-	content_instances["Location Info"].update_room_info(room_manager.get_child(0))
-
-	# Connect signals for room changes and updates
-	command_processor.connect("room_changed", self, "_on_room_changed")
-	command_processor.connect("room_updated", self, "_on_room_changed")
-
-	command_processor.connect("inventory_changed", self, "_on_inventory_changed")
 
 
+func setup_game():
+	# Setup or reset game state, connecting portals and initializing the room manager
+	player.reset_state()
+	
+	for i in range(room_manager.get_child_count()):
+		var world_node = room_manager.get_child(i)
+		for j in range(world_node.get_child_count()):
+			var room = world_node.get_child(j)
+			if room is GameRoom:
+				room.reset_state()
+				
+	room_manager.reset_state()
 
-func setup_game() -> void:
-	# Setup initial game state, connecting portals and initializing the room manager
 	player.connect_portal("avalonia", $"RoomManager/Avalonia/Central Avalonia")
 	player.connect_portal("home", $RoomManager/Home)
 	command_processor.room_manager = room_manager
 	room_manager.initialize(player, room_manager)
 
+	game_info.reset_state()
+
 	var starting_room_response = command_processor.initialize(room_manager.get_child(0), player)
+	var response = build_starting_response()
+	game_info.create_response(response)
+	game_info.create_response(starting_room_response)
+
+func initialize_inventory_panel():
+	content_instances["Location Info"] = location_info_scene.instance()
+	inventory_panel.add_child(content_instances["Location Info"])
+	content_instances["Location Info"].update_room_info(room_manager.get_child(0))
+
+func build_starting_response() -> String:
+	# Builds the starting response string for the game
 	var response = "A recent email from your friend, " + Types.wrap_npc_text("Athena") + ", has caught your attention. "
 	response += "She urgently needs to meet with you in Avalonia. To embark on this adventure, use the " + Types.wrap_system_text("portal") + " command followed by the "
 	response += Types.wrap_portal_text("world") + " you want to fast travel to.\n\n"
 	response += "In this case, type '" + Types.wrap_system_text("portal ") + Types.wrap_portal_text("avalonia") + "' to travel there.\n\n"
 	response += "You can always view a list of available commands by typing '" + Types.wrap_system_text("help") + "'.\n\n"
 	response += "Good luck on your journey!"
-
-	game_info.create_response(response)
-	game_info.create_response(starting_room_response)
-
+	return response
 
 func _on_dropdown_item_selected(index: int) -> void:
 	var selected_option = info_rows.dropdown_menu.get_item_text(index)
@@ -154,12 +179,20 @@ func get_rooms_state() -> Dictionary:
 	return rooms_state
 	
 func get_room_by_name(room_name: String) -> GameRoom:
+	# Check top-level rooms first
+	for i in range(room_manager.get_child_count()):
+		var child = room_manager.get_child(i)
+		if child is GameRoom and child.room_name == room_name:
+			return child
+	
+	# Check rooms within world nodes
 	for i in range(room_manager.get_child_count()):
 		var world_node = room_manager.get_child(i)
 		for j in range(world_node.get_child_count()):
-			var child = world_node.get_child(j)
-			if child is GameRoom and child.room_name == room_name:
-				return child
+			var nested_child = world_node.get_child(j)
+			if nested_child is GameRoom and nested_child.room_name == room_name:
+				return nested_child
+
 	return null
 	
 func get_hub_from_world(world_name: String) -> GameRoom:
@@ -199,6 +232,8 @@ func _on_FileLoadSelected(path: String) -> void:
 # Modified save_game function to use the provided path
 func save_game(save_path: String) -> void:
 	var game_state = get_game_state()
+	# Collect history data from GameInfo
+	game_state["history_data"] = game_info.get_history_data()
 	var file = File.new()
 	if file.open(save_path, File.WRITE) == OK:
 		var json_string = JSON.print(game_state)
@@ -223,6 +258,7 @@ func load_game(save_path: String) -> void:
 		print("Failed to load the game.")
 
 func set_game_state(state: Dictionary) -> void:
+	var room = null
 	if state.has("player_state"):
 		print("Setting Player State")
 		player.set_player_state(state["player_state"])
@@ -239,12 +275,21 @@ func set_game_state(state: Dictionary) -> void:
 	if state.has("current_room"):
 		print("Setting Current Room")
 		var room_name = state["current_room"]
-		var room = room_manager.find_node(room_name, true, false)
+		print(room_name)
+		room = room_manager.find_node(room_name, true, false)
+		print(room)
 		if room and room is GameRoom:
+			print("Changing Room...")
 			command_processor.change_room(room)
-			_load_room_description_after_load(room)
+			
+	if state.has("history_data"):
+		print("Setting History Rows")
+		game_info.restore_history(state["history_data"])
+		
+	_load_room_description_after_load(room)
 			
 func _load_room_description_after_load(room: GameRoom):
+	print("Creating game responses...")
 	var description = null
 	description = room.get_full_description()
 	game_info.create_response(Types.wrap_system_text("Game Restored!"))

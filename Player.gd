@@ -94,6 +94,10 @@ func set_player_state(state: Dictionary) -> void:
 			else:
 				printerr("Could not find hub in world: " + world_name)
 
+func reset_state():
+	inventory.clear()
+	fast_travel_locations.clear()
+	portals.clear()
 
 func create_or_fetch_item(item_data: Dictionary) -> Item:
 	var item_name = item_data["item_name"]
