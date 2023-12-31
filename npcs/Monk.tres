@@ -4,8 +4,13 @@
 
 [resource]
 script = ExtResource( 1 )
-npc_name = "monk"
+npc_name = "Monk"
+display_name = "Monk"
+npc_description = "A monk. Nothing special about him"
+examine_text = "This is text that appears when you examine this npc."
 initial_dialog = "The Grand Castle is a place of history and mystery, where the past speaks to those who listen.
+
 The walls have eyes and the shadows, whispers. Not every secret wishes to be known.
+
 The very stones of this castle hum with ancient spells. Heed their call, and you may yet unveil the secrets they guard."
 post_quest_dialog = "Thank you for completeing the quest."

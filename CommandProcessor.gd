@@ -167,7 +167,7 @@ func portal(world_keyword: String) -> String:
 	
 func take(second_word: String) -> String:
 	for item in current_room.items:
-		if second_word.to_lower() == item.item_name.to_lower():
+		if second_word.to_lower() == item.display_name.to_lower():
 			current_room.remove_item(item)
 			player.take_item(item)
 			emit_signal("inventory_changed")
@@ -186,7 +186,7 @@ func give(command_details: String) -> String:
 
 	var item_to_give = null
 	for item in player.inventory:
-		if item.item_name.to_lower() == item_name:
+		if item.display_name.to_lower() == item_name:
 			item_to_give = item
 			break
 
@@ -202,12 +202,13 @@ func give(command_details: String) -> String:
 	if not npc_to_give_to:
 		return Types.wrap_system_text("There's no one named " + Types.wrap_npc_text(npc_name) + " here to give anything to.")
 	
-	if npc_to_give_to.quest_item and npc_to_give_to.quest_item.item_name.to_lower() == item_name:
+	if npc_to_give_to.quest_item and npc_to_give_to.quest_item.display_name.to_lower() == item_name:
 		npc_to_give_to.has_received_quest_item = true
 		if npc_to_give_to.quest_reward != null:
 			var reward = npc_to_give_to.quest_reward
 			reward.room_2_is_locked = false
 		player.drop_item(item_to_give)
+		emit_signal("inventory_changed")
 		return "You give the " + Types.wrap_item_text(item_name) + " to " + Types.wrap_npc_text(npc_name) + "."
 	
 	return Types.wrap_system_text(npc_name.capitalize() + " doesn't need a " + item_name.capitalize() + ".")
@@ -240,7 +241,7 @@ func use(command_details: String) -> String:
 
 	var item_to_use = null
 	for item in player.inventory:
-		if item.item_name.to_lower() == item_name:
+		if item.display_name.to_lower() == item_name.to_lower():
 			item_to_use = item
 			break
 
@@ -260,6 +261,7 @@ func use(command_details: String) -> String:
 				return Types.wrap_system_text("The " + Types.wrap_location_text(exit.room_2.room_name) + " is not locked.")
 
 	return Types.wrap_system_text("There's nothing to use the '" + Types.wrap_item_text(item_name) + "' on here.")
+
 
 func examine(target_name: String) -> String:
 	target_name = target_name.to_lower()
@@ -288,7 +290,7 @@ func talk(second_word: String) -> String:
 	for npc in current_room.npcs:
 		if npc.npc_name.to_lower() == second_word:
 			var dialog = npc.post_quest_dialog if npc.has_received_quest_item else npc.initial_dialog
-			return Types.wrap_npc_text(npc.npc_name + ": ") + Types.wrap_speech_text("\"" + dialog + "\"")
+			return Types.wrap_npc_text(npc.npc_name + ": \n") + Types.wrap_speech_text(dialog)
 	
 	return Types.wrap_system_text(Types.wrap_npc_text(second_word) + " is not in the area.")
 

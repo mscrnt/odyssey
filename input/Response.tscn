@@ -6,8 +6,10 @@
 margin_top = 35.0
 margin_right = 779.0
 margin_bottom = 66.0
+focus_mode = 2
 custom_fonts/normal_font = ExtResource( 1 )
 bbcode_enabled = true
 bbcode_text = "Hello![color=green] This is what the [color=red] response [color=] line is."
 text = "Hello! This is what the  response  line is."
 fit_content_height = true
+selection_enabled = true

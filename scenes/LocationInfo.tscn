@@ -5,10 +5,14 @@
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=9]
 
-[node name="InfoRows" type="VBoxContainer"]
+[node name="InfoRows2" type="VBoxContainer"]
 margin_right = 200.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 200, 0 )
@@ -40,8 +44,8 @@ custom_styles/bg = SubResource( 9 )
 scroll_horizontal_enabled = false
 
 [node name="Rows" type="VBoxContainer" parent="InventoryPanel/MarginContainer/Scroll"]
-margin_right = 180.0
-margin_bottom = 550.0
+margin_right = 168.0
+margin_bottom = 338.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5

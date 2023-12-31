@@ -1,0 +1,99 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://fonts/wellfleet_mono_16.tres" type="DynamicFont" id=1]
+[ext_resource path="res://top_bar/HowToPlayDialog.gd" type="Script" id=2]
+[ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.145098, 0.145098, 0.145098, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+
+[node name="HowToPlayDialog" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/title_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+custom_constants/title_height = -56
+custom_fonts/title_font = ExtResource( 3 )
+custom_styles/panel = SubResource( 4 )
+window_title = "How To Play"
+script = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_top = 0.087
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1190.0
+margin_bottom = 629.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 1180.0
+margin_bottom = 577.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 2 )
+scroll_horizontal_enabled = false
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Scroll"]
+margin_right = 1180.0
+margin_bottom = 577.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Scroll/Content"]
+margin_right = 1180.0
+margin_bottom = 577.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 3
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="HowToPlayText" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Scroll/Content/MarginContainer"]
+margin_left = 5.0
+margin_top = 3.0
+margin_right = 1175.0
+margin_bottom = 572.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/bold_font = ExtResource( 1 )
+custom_fonts/normal_font = ExtResource( 1 )
+bbcode_enabled = true
+bbcode_text = "Placeholder text"
+text = "Placeholder text"
+fit_content_height = true
+
+[node name="BottomButton" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 592.0
+margin_right = 1180.0
+margin_bottom = 619.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/BottomButton"]
+margin_left = 563.0
+margin_right = 617.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 1 )
+text = "Close"

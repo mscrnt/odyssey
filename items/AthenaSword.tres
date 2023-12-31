@@ -4,6 +4,9 @@
 
 [resource]
 script = ExtResource( 1 )
-item_name = "athenas sword"
+item_name = "AthenaSword"
+display_name = "Athenas Sword"
 item_type = 1
-item_description = ""
+is_single_use = false
+item_description = "Athena's Sword"
+examine_text = "This is text that appears when you examine this item."

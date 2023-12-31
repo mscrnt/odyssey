@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://fonts/wellfleet_mono_28.tres" type="DynamicFont" id=2]
@@ -9,12 +9,26 @@
 [ext_resource path="res://rooms/RoomManager.gd" type="Script" id=7]
 [ext_resource path="res://Player.gd" type="Script" id=8]
 [ext_resource path="res://GameInfo.tscn" type="PackedScene" id=9]
+[ext_resource path="res://top_bar/HowToPlayDialog.tscn" type="PackedScene" id=10]
+[ext_resource path="res://top_bar/Marquee.gd" type="Script" id=11]
+[ext_resource path="res://AboutDialog.tscn" type="PackedScene" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.207843, 0.207843, 0.207843, 1 )
 
+[sub_resource type="StyleBoxFlat" id=12]
+bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.12549, 0.12549, 0.12549, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=11]
 
@@ -59,6 +73,7 @@ margin_top = -688.0
 margin_right = 1064.0
 margin_bottom = -450.0
 room_name = "Central Avalonia"
+world_name = "Avalonia"
 room_description = "a bustling nexus of the mystical land of Avalonia, teeming with life and activity. The Grand Castle, visible from miles away, dominates the skyline to the north,, symbolizing strength and wisdom."
 is_hub = true
 
@@ -68,6 +83,7 @@ margin_top = -973.0
 margin_right = 808.0
 margin_bottom = -831.0
 room_name = "The Grand Courtyard"
+world_name = "Avalonia"
 room_description = "a garden overlooking the Mystic Market. There are stairs you can take down to the market."
 
 [node name="Throne Room" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
@@ -76,6 +92,7 @@ margin_top = -1423.0
 margin_right = 1075.0
 margin_bottom = -1113.0
 room_name = "The Throne Room"
+world_name = "Avalonia"
 room_description = "the heart of the Grand Castle. The Throne Room is a grandiose hall adorned with ornate tapestries and gleaming armor. The throne itself, a masterpiece of craftsmanship, sits majestically at the far end, a symbol of the kingdom's enduring legacy.
 "
 
@@ -84,7 +101,8 @@ margin_left = 820.0
 margin_top = -1046.0
 margin_right = 1070.0
 margin_bottom = -736.0
-room_name = "The Grand Castle"
+room_name = "Grand Castle"
+world_name = "Avalonia"
 room_description = "dominating the skyline of Central Avalonia... The Grand Castle is a beacon of power and history. Its towering spires and fortified walls are a testament to the ancient magic and architecture of Avalonia. The castle is a labyrinth of grand halls and secret passages, each echoing with tales of yore."
 
 [node name="Mystic Market" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
@@ -93,6 +111,7 @@ margin_top = -746.0
 margin_right = 781.0
 margin_bottom = -364.0
 room_name = "Mystic Market"
+world_name = "Avalonia"
 room_description = "a bustling hub in the heart of Avalonia. The Mystic Market is a sensory overload of sights, sounds, and scents. Stalls and shops line the crowded streets, offering a plethora of magical artifacts and exotic goods. The air is filled with the aroma of mystical incense, the chatter of bargaining customers, and the occasional sparkle of a newly cast spell.
 "
 
@@ -102,6 +121,7 @@ margin_top = -435.0
 margin_right = 1068.0
 margin_bottom = -77.0
 room_name = "The Hall of Elders"
+world_name = "Avalonia"
 room_description = " a sanctum of ancient wisdom and revered traditions. Majestic in its design, the hall features towering columns, intricate murals depicting the history of Avalonia, and shelves lined with age-old tomes and artifacts. The air is filled with a serene silence, occasionally broken by the soft murmur of scholars and the rustling of parchment."
 
 [node name="Royal Library" parent="RoomManager/Avalonia" instance=ExtResource( 6 )]
@@ -110,6 +130,7 @@ margin_top = -1048.0
 margin_right = 1461.0
 margin_bottom = -714.0
 room_name = "Royal Library"
+world_name = "Avalonia"
 room_description = "a sanctum of knowledge, the Royal Library houses towering shelves filled with ancient scrolls and books. Soft candlelight flickers across the room, illuminating the wisdom preserved for generations. It's a place of study and discovery, where the past speaks to those who listen.
 "
 
@@ -119,6 +140,7 @@ margin_top = -1024.0
 margin_right = 1813.0
 margin_bottom = -738.0
 room_name = "Secret Chamber"
+world_name = "Avalonia"
 room_description = "concealed behind a hidden door in the Royal Library, the Secret Chamber holds the most confidential archives and artifacts of the kingdom. The chamber, shrouded in mystery, is said to contain powerful relics and forbidden knowledge.
 "
 is_hidden = true
@@ -127,6 +149,7 @@ is_hidden = true
 margin_bottom = -1.0
 room_name = "Sewers"
 display_name = "Sewers"
+world_name = "Avalonia"
 room_description = "dark and dank. You can see and hear what looks like Central Avalonia on the other side of the drain."
 examine_text = "A metel grate leads the path to the underground sewers of Central Avalonia"
 
@@ -136,56 +159,90 @@ anchor_bottom = 1.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Background"]
-margin_right = 1024.0
-margin_bottom = 600.0
+margin_right = 1200.0
+margin_bottom = 700.0
 custom_constants/margin_right = 15
 custom_constants/margin_top = 15
 custom_constants/margin_left = 15
 custom_constants/margin_bottom = 15
 
-[node name="Columns" type="HBoxContainer" parent="Background/MarginContainer"]
+[node name="UI" type="VBoxContainer" parent="Background/MarginContainer"]
 margin_left = 15.0
 margin_top = 15.0
-margin_right = 1009.0
-margin_bottom = 585.0
-custom_constants/separation = 15
+margin_right = 1185.0
+margin_bottom = 685.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
 
-[node name="InfoRows" parent="Background/MarginContainer/Columns" instance=ExtResource( 4 )]
-margin_right = 250.0
-rect_min_size = Vector2( 250, 0 )
+[node name="GameArea" type="HBoxContainer" parent="Background/MarginContainer/UI"]
+margin_right = 1170.0
+margin_bottom = 670.0
+size_flags_vertical = 3
+custom_constants/separation = 10
 
-[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/Columns"]
-margin_left = 265.0
-margin_right = 994.0
-margin_bottom = 570.0
+[node name="InfoRows" parent="Background/MarginContainer/UI/GameArea" instance=ExtResource( 4 )]
+margin_right = 225.0
+margin_bottom = 670.0
+rect_min_size = Vector2( 225, 0 )
+
+[node name="GameRows" type="VBoxContainer" parent="Background/MarginContainer/UI/GameArea"]
+margin_left = 235.0
+margin_right = 1170.0
+margin_bottom = 670.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 15
 
-[node name="GameInfo" parent="Background/MarginContainer/Columns/GameRows" instance=ExtResource( 9 )]
-margin_right = 729.0
+[node name="FlashBar" type="PanelContainer" parent="Background/MarginContainer/UI/GameArea/GameRows"]
+margin_right = 935.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 0, 35 )
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 12 )
 
-[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/Columns/GameRows"]
-margin_top = 535.0
-margin_right = 729.0
-margin_bottom = 570.0
+[node name="MarginContainer" type="MarginContainer" parent="Background/MarginContainer/UI/GameArea/GameRows/FlashBar"]
+margin_right = 935.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+
+[node name="Marquee" type="RichTextLabel" parent="Background/MarginContainer/UI/GameArea/GameRows/FlashBar/MarginContainer"]
+margin_right = 935.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+custom_colors/default_color = Color( 0.898039, 0.898039, 0.521569, 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+bbcode_enabled = true
+bbcode_text = "Placeholder_Text"
+text = "Placeholder_Text"
+script = ExtResource( 11 )
+
+[node name="GameInfo" parent="Background/MarginContainer/UI/GameArea/GameRows" instance=ExtResource( 9 )]
+margin_top = 50.0
+margin_right = 935.0
+margin_bottom = 620.0
+
+[node name="InputArea" type="PanelContainer" parent="Background/MarginContainer/UI/GameArea/GameRows"]
+margin_top = 635.0
+margin_right = 935.0
+margin_bottom = 670.0
 rect_min_size = Vector2( 0, 35 )
 custom_styles/panel = SubResource( 3 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/Columns/GameRows/InputArea"]
-margin_right = 729.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea"]
+margin_right = 935.0
 margin_bottom = 35.0
 
-[node name="Caret" type="Label" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
+[node name="Caret" type="Label" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer"]
 margin_top = 2.0
 margin_right = 28.0
 margin_bottom = 33.0
 custom_fonts/font = ExtResource( 2 )
 text = " > "
 
-[node name="Input" type="LineEdit" parent="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer"]
+[node name="Input" type="LineEdit" parent="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer"]
 margin_left = 32.0
-margin_right = 729.0
+margin_right = 935.0
 margin_bottom = 35.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 3 )
@@ -194,8 +251,16 @@ custom_styles/normal = SubResource( 4 )
 max_length = 48
 script = SubResource( 10 )
 
+[node name="HowToPlayDialog" parent="Background" instance=ExtResource( 10 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1200.0
+margin_bottom = 700.0
+
+[node name="AboutDialog" parent="Background" instance=ExtResource( 12 )]
+
 [node name="Player" type="Node" parent="."]
 script = ExtResource( 8 )
 
-[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
-[connection signal="text_entered" from="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/Columns/GameRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]
+[connection signal="text_entered" from="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" to="." method="_on_Input_text_entered"]
+[connection signal="text_entered" from="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" to="Background/MarginContainer/UI/GameArea/GameRows/InputArea/HBoxContainer/Input" method="_on_Input_text_entered"]
